@@ -3,6 +3,8 @@ package com.challenge.LiteraAlura.principal;
 import com.challenge.LiteraAlura.model.Datos;
 import com.challenge.LiteraAlura.service.ConsumoAPI;
 import com.challenge.LiteraAlura.service.ConvierteDatos;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.util.Scanner;
 
@@ -60,9 +62,23 @@ public class Principal {
         var palabrasClave = teclado.nextLine();
         System.out.println(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
         var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
-        System.out.println(json + "hola buenas tardes");
-        //Datos datos = conversor.obtenerDatos(json, Datos.class);
-        //System.out.println(datos);
+        //imprimirLindo(json);
+        Datos datos = conversor.obtenerDatos(json, Datos.class);
+        System.out.println(datos);
+    }
+
+    public static void imprimirLindo(String json) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            // Parse the JSON string into a structured object (Map, List, etc.)
+            Object jsonObject = mapper.readValue(json, Object.class);
+            // Pretty-print the structured object
+            ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+            String prettyJson = writer.writeValueAsString(jsonObject);
+            System.out.println(prettyJson);
+        } catch (Exception e) {
+            System.err.println("Failed to parse and pretty-print JSON: " + e.getMessage());
+        }
     }
 
 

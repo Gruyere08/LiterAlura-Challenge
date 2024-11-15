@@ -19,13 +19,10 @@ public class ConsumoAPI {
             response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("Status code: " + response.statusCode());
-            System.out.println("Headers: " + response.headers());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+            //System.out.println("Headers: " + response.headers());
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        String json = response.body();
-        return json;
+        return response.body();
     }
 }
