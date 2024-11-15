@@ -4,7 +4,7 @@ import com.challenge.LiteraAlura.service.ConsumoAPI;
 
 import java.util.Scanner;
 
-public class principal {
+public class Principal {
 
     private Scanner teclado = new Scanner(System.in);
     private ConsumoAPI consumoApi = new ConsumoAPI();
@@ -14,15 +14,11 @@ public class principal {
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
-                    1 - Buscar series 
+                    1 - Buscar Libro por nombre
                     2 - Buscar episodios
                     3 - Mostrar series buscadas
                     4 - Buscar series por titulo
                     5 - Top 5 mejores series
-                    6 - Buscar Series por categoría
-                    7 - filtrar series por temporadas y evaluación
-                    8 - Buscar episodios por titulo
-                    9 - Top 5 episodios por Serie
                                   
                     0 - Salir
                     """;
