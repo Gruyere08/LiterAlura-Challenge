@@ -1,6 +1,8 @@
 package com.challenge.LiteraAlura.principal;
 
+import com.challenge.LiteraAlura.model.Datos;
 import com.challenge.LiteraAlura.service.ConsumoAPI;
+import com.challenge.LiteraAlura.service.ConvierteDatos;
 
 import java.util.Scanner;
 
@@ -8,6 +10,8 @@ public class Principal {
 
     private Scanner teclado = new Scanner(System.in);
     private ConsumoAPI consumoApi = new ConsumoAPI();
+    private final String URL_BASE = "https://gutendex.com/books";
+    private ConvierteDatos conversor = new ConvierteDatos();
 
 
     public void iniciarPrograma(){
@@ -28,7 +32,7 @@ public class Principal {
 
             switch (opcion) {
                 case 1:
-                    //codigo
+                    buscarLibroWeb();
                     break;
                 case 2:
                     //codigo
@@ -51,7 +55,15 @@ public class Principal {
         }
     }
 
-
+    public void buscarLibroWeb(){
+        System.out.println("Escriba palabras clave que quiera buscar, separando con espacios cada palabra");
+        var palabrasClave = teclado.nextLine();
+        System.out.println(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
+        var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
+        System.out.println(json + "hola buenas tardes");
+        //Datos datos = conversor.obtenerDatos(json, Datos.class);
+        //System.out.println(datos);
+    }
 
 
 
