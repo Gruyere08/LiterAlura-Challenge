@@ -28,16 +28,16 @@ public class Principal {
     public void iniciarPrograma(){
         var opcion = -1;
         while (opcion != 0) {
-            var menu = """
+            var menu = String.format("""
                     ---------- MENU DE OPCIONES ----------
-                    1 - Buscar Libro por nombre
-                    2 - Buscar episodios
-                    3 - Mostrar series buscadas
-                    4 - Buscar series por titulo
-                    5 - Top 5 mejores series
-                                  
-                    0 - Salir
-                    """;
+                    %s1 - Buscar Libro por nombre
+                    2 - Listar libros registrados
+                    3 - Listar autores registrados
+                    4 - Listar autores vivos en un determinado año
+                    5 - Listar libros por idioma
+                    %s              
+                    0 - Salir %s
+                    """, verde, rojo, colorReset);
             System.out.println(menu);
             opcion = teclado.nextInt();
             teclado.nextLine();
@@ -86,7 +86,7 @@ public class Principal {
             System.out.println("---------- RESULTADOS ----------");
             opciones.stream().forEach(s -> {
                 int contadorActual = contador.getAndIncrement();
-                System.out.println(azul + contadorActual + ". " + s.titulo());
+                System.out.println(azul + contadorActual + " - " + s.titulo());
                 System.out.println(verde + "----------------- POR: " + s.autoresToString() + colorReset);
             });
 
