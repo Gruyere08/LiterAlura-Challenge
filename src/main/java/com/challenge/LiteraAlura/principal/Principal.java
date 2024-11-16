@@ -73,7 +73,6 @@ public class Principal {
         System.out.println(verde + "*Se mostraran los primeros 10 resultados*" + colorReset);
 
         var palabrasClave = teclado.nextLine();
-        System.out.println(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
         var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
         //imprimirLindo(json);
         Datos datos = conversor.obtenerDatos(json, Datos.class);
@@ -90,6 +89,26 @@ public class Principal {
                 System.out.println(azul + contadorActual + ". " + s.titulo());
                 System.out.println(verde + "----------------- POR: " + s.autoresToString() + colorReset);
             });
+
+            System.out.println(rojo + "\n0. SALIR" + colorReset);
+
+            System.out.println("ELIJA UNA OPCION: ");
+            int opcion = -1;
+            while (true){
+                opcion = teclado.nextInt();
+                if (opcion > 0 && opcion <= opciones.size()){
+                    opcion --;
+                    DatosLibro libroElegido = opciones.get(opcion);
+                    System.out.println("---------- SU ELECCION ----------");
+                    System.out.println("EL LIBRO ELEGIDO FUE: ");
+                    System.out.println(azul + "---> " + libroElegido.titulo());
+                    System.out.println(verde + "----------------- POR: " + libroElegido.autoresToString() + colorReset);
+                    return;
+                } else if (opcion == 0) {
+                    return;
+                }
+            }
+
         } else {
             System.out.println("---------- RESULTADOS ----------");
             System.out.println(rojo + "No se encontraron series con los términos dados" + colorReset);

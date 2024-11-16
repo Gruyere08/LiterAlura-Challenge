@@ -18,7 +18,7 @@ public class ConsumoAPI {
         try {
             response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Status code: " + response.statusCode());
+            //System.out.println("Status code: " + response.statusCode());
             //System.out.println("Headers: " + response.headers());
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
