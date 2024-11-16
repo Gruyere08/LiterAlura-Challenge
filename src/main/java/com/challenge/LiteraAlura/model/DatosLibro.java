@@ -14,6 +14,22 @@ public record DatosLibro(
     @JsonAlias("subjects") List<String> temas,
     @JsonAlias("languages") List<String> lenguajes,
     @JsonAlias("download_count") long descargas
-
 ) {
+
+    public String autoresToString(){
+        if (datosAutor.size() == 1) {
+            return datosAutor.get(0).nombre();
+        } else if (datosAutor.size() > 1) {
+            String string = "";
+            for (int i = 0; i < datosAutor.size() - 2; i++) {
+                string = string + datosAutor.get(i).nombre() + "; ";
+            }
+            string = string + datosAutor.get(datosAutor.size()-2).nombre();
+            string = string + " y " + datosAutor.get(datosAutor.size()-1).nombre();
+            return string;
+        } else {
+            return "Autor Desconocido";
+        }
+    }
+
 }
