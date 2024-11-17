@@ -45,6 +45,7 @@ public class LibroService {
 
             if(autorExistente.isPresent()){
                 autor = autorExistente.get();
+                System.out.println("AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre());
             }else {
                 autor = new Autor(datoAutor);
                 System.out.println("NUEVO AUTOR REGISTRADO: " + autor.getNombre());
