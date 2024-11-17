@@ -18,7 +18,7 @@ public class Libro {
     private List<String> lenguajes;
     private long descargas;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "libros_autores",
             joinColumns = @JoinColumn(name = "libro_id"),

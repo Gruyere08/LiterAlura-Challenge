@@ -48,6 +48,7 @@ public class LibroService {
                 System.out.println("AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre());
             }else {
                 autor = new Autor(datoAutor);
+                autorRepository.save(autor);
                 System.out.println("NUEVO AUTOR REGISTRADO: " + autor.getNombre());
             }
             autoresParaAgregar.add(autor);

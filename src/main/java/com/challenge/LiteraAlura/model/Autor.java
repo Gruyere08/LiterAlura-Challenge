@@ -1,6 +1,7 @@
 package com.challenge.LiteraAlura.model;
 
 import jakarta.persistence.*;
+import org.springframework.lang.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,10 +14,12 @@ public class Autor {
     private long id;
     @Column(unique = true, nullable = false)
     private String nombre;
-    private int anio_nacimiento;
-    private int anio_fallecimiento;
+    @Column(nullable = true)
+    private Integer anio_nacimiento;
+    @Column(nullable = true)
+    private Integer anio_fallecimiento;
 
-    @ManyToMany(mappedBy = "autores", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     private Set<Libro> libros = new HashSet<>();
 
 
