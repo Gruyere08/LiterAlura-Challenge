@@ -2,10 +2,13 @@ package com.challenge.LiteraAlura.principal;
 
 import com.challenge.LiteraAlura.model.Datos;
 import com.challenge.LiteraAlura.model.DatosLibro;
+import com.challenge.LiteraAlura.model.Libro;
 import com.challenge.LiteraAlura.service.ConsumoAPI;
 import com.challenge.LiteraAlura.service.ConvierteDatos;
+import com.challenge.LiteraAlura.service.LibroService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Scanner;
@@ -18,11 +21,17 @@ public class Principal {
     private ConsumoAPI consumoApi = new ConsumoAPI();
     private final String URL_BASE = "https://gutendex.com/books";
     private ConvierteDatos conversor = new ConvierteDatos();
+    private LibroService libroService;
 
     private final String azul = "\u001B[34m";
     private final String verde = "\u001B[32m";
     private final String rojo = "\u001B[31m";
     private final String colorReset = "\u001B[0m";
+
+    @Autowired
+    public Principal(LibroService libroService){
+        this.libroService = libroService;
+    }
 
 
     public void iniciarPrograma(){
@@ -103,6 +112,10 @@ public class Principal {
                     System.out.println("EL LIBRO ELEGIDO FUE: ");
                     System.out.println(azul + "---> " + libroElegido.titulo());
                     System.out.println(verde + "----------------- POR: " + libroElegido.autoresToString() + colorReset);
+                    System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
+                    Libro libroAGuardar = new Libro(libroElegido);
+                    libroService.guardarLibroConAutores(libroAGuardar, libroElegido.datosAutor());
+
                     return;
                 } else if (opcion == 0) {
                     return;
