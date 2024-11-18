@@ -2,12 +2,15 @@ package com.challenge.LiteraAlura.model;
 
 import com.challenge.LiteraAlura.otros.Color;
 import jakarta.persistence.*;
-import org.springframework.lang.Nullable;
 
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+
+
+
 
 @Entity
 @Table(name="autores")
@@ -22,9 +25,10 @@ public class Autor {
     @Column(nullable = true)
     private Integer anio_fallecimiento;
 
-    //@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER)
-    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER, mappedBy = "autores")
     private Set<Libro> libros = new HashSet<>();
+
+    private static int cantidadPopulares = 3;
 
     public Autor(){}
 
@@ -39,18 +43,35 @@ public class Autor {
         return "---------- AUTOR ---------- \n"
                 + Color.CYAN + "Nombre: " + nombre + "\n"
                 + Color.VERDE_CLARO + "Periodo: "
-                + (anio_nacimiento != null ? anio_nacimiento : "DESCONOCIDO") + " - "
-                + (anio_fallecimiento != null ? anio_fallecimiento : "DESCONOCIDO") + "\n"
-                + Color.MORADO + "Libros populares: " + topLibrosToString(5) + Color.RESET;
+                + (anio_nacimiento != null ? anio_nacimiento : "Desconocido") + " - "
+                + (anio_fallecimiento != null ? anio_fallecimiento : "Desconocido") + "\n"
+                + Color.MORADO + "Libros populares: " + topLibrosToString(cantidadPopulares) + Color.RESET;
     }
 
 
     public String topLibrosToString(int limite){
-        return libros.stream()
+        List<String> listaPopulares = libros.stream()
                 .sorted(Comparator.comparingLong(Libro::getDescargas).reversed())  // Sort by descargas in descending order
                 .limit(limite)  // Limit the result to top 5
                 .map(Libro::getTitulo)  // Extract the "titulo" of each libro
-                .collect(Collectors.joining("; "));
+                .toList();
+
+        if(listaPopulares.size() == 1){
+            return listaPopulares.get(0);
+        }
+
+        StringBuilder stringFinal = new StringBuilder();
+        stringFinal.append(listaPopulares.get(0)).append("\n");
+
+        for(String popular : listaPopulares.subList(1,listaPopulares.size() - 1)){
+            stringFinal.append("----------------- ")
+                    .append(popular)
+                    .append("\n");
+        }
+
+        stringFinal.append("----------------- ").append(listaPopulares.get(listaPopulares.size()-1));
+
+        return stringFinal.toString();
     }
 
     public Set<Libro> getLibros() {

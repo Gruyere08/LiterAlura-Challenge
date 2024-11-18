@@ -79,5 +79,9 @@ public class LibroService {
         return autorRepository.findAllWithLibros();
     }
 
+    public List<Autor> traerAutoresVivosEnAnio(int anio){
+        return autorRepository.findAutoresVivosEnAnio(anio);
+    }
+
 
 }

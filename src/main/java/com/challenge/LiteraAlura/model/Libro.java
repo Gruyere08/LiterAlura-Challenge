@@ -20,7 +20,7 @@ public class Libro {
     private List<String> lenguajes;
     private long descargas;
 
-    //@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+
     @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     @JoinTable(
             name = "libros_autores",
@@ -51,13 +51,18 @@ public class Libro {
     public String autoresToString(){
         StringBuilder stringAutores = new StringBuilder();
         int size = autores.size();
-
         Iterator<Autor> iterador = autores.iterator();
         int count = 0;
+
+        if (size == 0){
+            return "Desconocido";
+        }
 
         while (iterador.hasNext()) {
             Autor autor = iterador.next();
             count++;
+
+
 
             if (size == 1){
                 return autor.getNombre();

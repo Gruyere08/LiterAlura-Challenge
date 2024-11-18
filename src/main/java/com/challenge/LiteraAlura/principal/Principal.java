@@ -60,7 +60,7 @@ public class Principal {
                     listarTodosLosAutores();
                     break;
                 case 4:
-                    //codigo
+                    listarAutoresVivosEnAnio();
                     break;
                 case 5:
                     //codigo
@@ -129,15 +129,27 @@ public class Principal {
     }
 
     public void listarTodosLosLibros(){
-        List<Libro> LibrosAMostrar = libroService.traerTodosLosLibros();
-        LibrosAMostrar.forEach(System.out::println);
+        List<Libro> librosAMostrar = libroService.traerTodosLosLibros();
+        librosAMostrar.forEach(System.out::println);
 
     }
 
     public void listarTodosLosAutores(){
-        List<Autor> LibrosAMostrar = libroService.traerTodosLosautores();
-        LibrosAMostrar.forEach(System.out::println);
+        List<Autor> autoresAMostrar = libroService.traerTodosLosautores();
+        autoresAMostrar.forEach(System.out::println);
 
+    }
+
+
+    public void listarAutoresVivosEnAnio(){
+        System.out.println("---------- BUSQUEDA DE AUTORES POR AÑO ----------");
+        System.out.println(Color.AZUL + "Ingrese el año que desea buscar");
+        System.out.println(Color.MORADO + "*Se mostraran los autores que estaban vivos en ese año*" + Color.RESET);
+        int anio = teclado.nextInt();
+        teclado.nextLine();
+        List<Autor> autoresAMostrar = libroService.traerAutoresVivosEnAnio(anio);
+        System.out.println("---------- AUTORES VIVOS EN EL AÑO " + anio + " ----------");
+        autoresAMostrar.forEach(System.out::println);
     }
 
 
