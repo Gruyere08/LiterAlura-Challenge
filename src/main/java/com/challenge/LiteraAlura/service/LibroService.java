@@ -65,5 +65,9 @@ public class LibroService {
         return libroRepository.findAll();
     }
 
+    public List<Autor> traerTodosLosautores(){
+        return autorRepository.findAll();
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.challenge.LiteraAlura.principal;
 import com.challenge.LiteraAlura.model.Datos;
 import com.challenge.LiteraAlura.model.DatosLibro;
 import com.challenge.LiteraAlura.model.Libro;
+import com.challenge.LiteraAlura.otros.Color;
 import com.challenge.LiteraAlura.service.ConsumoAPI;
 import com.challenge.LiteraAlura.service.ConvierteDatos;
 import com.challenge.LiteraAlura.service.LibroService;
@@ -23,10 +24,6 @@ public class Principal {
     private ConvierteDatos conversor = new ConvierteDatos();
     private LibroService libroService;
 
-    private final String azul = "\u001B[34m";
-    private final String verde = "\u001B[32m";
-    private final String rojo = "\u001B[31m";
-    private final String colorReset = "\u001B[0m";
 
     @Autowired
     public Principal(LibroService libroService){
@@ -46,7 +43,7 @@ public class Principal {
                     5 - Listar libros por idioma
                     %s              
                     0 - Salir %s
-                    """, verde, rojo, colorReset);
+                    """, Color.AZUL, Color.ROJO, Color.RESET);
             System.out.println(menu);
             opcion = teclado.nextInt();
             teclado.nextLine();
@@ -78,8 +75,8 @@ public class Principal {
 
     public void buscarLibroWeb(){
         System.out.println("---------- BUSQUEDA DE LIBROS ----------");
-        System.out.println(azul + "Escriba palabras clave que quiera buscar, separando con espacios cada palabra");
-        System.out.println(verde + "*Se mostraran los primeros 10 resultados*" + colorReset);
+        System.out.println(Color.AZUL + "Escriba palabras clave que quiera buscar, separando con espacios cada palabra");
+        System.out.println(Color.MORADO + "*Se mostraran los primeros 10 resultados*" + Color.RESET);
 
         var palabrasClave = teclado.nextLine();
         var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
@@ -95,11 +92,11 @@ public class Principal {
             System.out.println("---------- RESULTADOS ----------");
             opciones.stream().forEach(s -> {
                 int contadorActual = contador.getAndIncrement();
-                System.out.println(azul + contadorActual + " - " + s.titulo());
-                System.out.println(verde + "----------------- POR: " + s.autoresToString() + colorReset);
+                System.out.println(Color.AZUL + contadorActual + " - " + s.titulo());
+                System.out.println(Color.CYAN + "----------------- POR: " + s.autoresToString() + Color.RESET);
             });
 
-            System.out.println(rojo + "\n0. SALIR" + colorReset);
+            System.out.println(Color.ROJO + "\n0. SALIR" + Color.RESET);
 
             System.out.println("ELIJA UNA OPCION: ");
             int opcion = -1;
@@ -110,8 +107,8 @@ public class Principal {
                     DatosLibro libroElegido = opciones.get(opcion);
                     System.out.println("---------- SU ELECCION ----------");
                     System.out.println("EL LIBRO ELEGIDO FUE: ");
-                    System.out.println(azul + "---> " + libroElegido.titulo());
-                    System.out.println(verde + "----------------- POR: " + libroElegido.autoresToString() + colorReset);
+                    System.out.println(Color.AZUL + "---> " + libroElegido.titulo());
+                    System.out.println(Color.CYAN + "----------------- POR: " + libroElegido.autoresToString() + Color.RESET);
                     System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
                     Libro libroAGuardar = new Libro(libroElegido);
                     libroService.guardarLibroConAutores(libroAGuardar, libroElegido.datosAutor());
@@ -124,7 +121,7 @@ public class Principal {
 
         } else {
             System.out.println("---------- RESULTADOS ----------");
-            System.out.println(rojo + "No se encontraron series con los términos dados" + colorReset);
+            System.out.println(Color.ROJO + "No se encontraron series con los términos dados" + Color.RESET);
         }
 
 

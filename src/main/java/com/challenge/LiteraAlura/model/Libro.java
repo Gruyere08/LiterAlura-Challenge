@@ -1,4 +1,5 @@
 package com.challenge.LiteraAlura.model;
+import com.challenge.LiteraAlura.otros.Color;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -41,9 +42,9 @@ public class Libro {
     @Override
     public String toString() {
         return "---------- LIBRO ---------- \n"+
-                "Titulo: " + titulo + "\n"+
-                "Autores: " + autoresToString() + "\n" +
-                "Descargas: " + descargas;
+                Color.AZUL +"Titulo: " + titulo + "\n"+
+                Color.CYAN+ "Autores: " + autoresToString() + "\n" +
+                Color.MORADO +"Descargas: " + descargas + Color.RESET;
     }
 
     public String autoresToString(){
