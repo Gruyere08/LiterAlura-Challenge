@@ -2,10 +2,7 @@ package com.challenge.LiteraAlura.model;
 import com.challenge.LiteraAlura.otros.Color;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "libros")
@@ -17,7 +14,15 @@ public class Libro {
     @Column(unique = true, nullable = false)
     private String titulo;
     private List<String> temas;
-    private List<String> lenguajes;
+
+
+    @ElementCollection
+    @CollectionTable(
+            name = "libros_lenguajes", // Name of the secondary table
+            joinColumns = @JoinColumn(name = "libro_id") // Foreign key to the primary table
+    )
+    @Column(name = "lenguaje") // Name of the column storing the language values
+    private List<String> lenguajes = new ArrayList<>(); // Initializes the collection
     private long descargas;
 
 

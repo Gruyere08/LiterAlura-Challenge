@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -46,8 +47,7 @@ public class Principal {
                     0 - Salir %s
                     """, Color.AZUL, Color.ROJO, Color.RESET);
             System.out.println(menu);
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            opcion = solicitarEntero(0, 5);
 
             switch (opcion) {
                 case 1:
@@ -150,6 +150,24 @@ public class Principal {
         List<Autor> autoresAMostrar = libroService.traerAutoresVivosEnAnio(anio);
         System.out.println("---------- AUTORES VIVOS EN EL AÑO " + anio + " ----------");
         autoresAMostrar.forEach(System.out::println);
+    }
+
+    public int solicitarEntero(int limiteInferior, int limiteSuperior){
+        int entero;
+        while (true){
+            try{
+                entero = teclado.nextInt();
+                teclado.nextLine();
+                if (entero >= limiteInferior && entero <= limiteSuperior){
+                    break;
+                }
+                System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido" + Color.RESET);
+            }catch (InputMismatchException e){
+                System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido" + Color.RESET);
+                teclado.nextLine();
+            }
+        }
+        return entero;
     }
 
 
