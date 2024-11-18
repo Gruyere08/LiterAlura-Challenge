@@ -61,4 +61,9 @@ public class LibroService {
     }
 
 
+    public List<Libro> traerTodosLosLibros(){
+        return libroRepository.findAll();
+    }
+
+
 }

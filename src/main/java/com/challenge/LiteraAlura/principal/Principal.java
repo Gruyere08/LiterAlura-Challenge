@@ -56,7 +56,7 @@ public class Principal {
                     buscarLibroWeb();
                     break;
                 case 2:
-                    //codigo
+                    listarTodosLosLibros();
                     break;
                 case 3:
                     //codigo
@@ -129,6 +129,14 @@ public class Principal {
 
 
     }
+
+    public void listarTodosLosLibros(){
+        List<Libro> LibrosAMostrar = libroService.traerTodosLosLibros();
+        LibrosAMostrar.forEach(System.out::println);
+
+    }
+
+
 
     public static void imprimirLindo(String json) {
         try {
