@@ -20,7 +20,8 @@ public class Libro {
     private List<String> lenguajes;
     private long descargas;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+    //@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     @JoinTable(
             name = "libros_autores",
             joinColumns = @JoinColumn(name = "libro_id"),
@@ -80,12 +81,18 @@ public class Libro {
 
     public void setAutores(Set<Autor> autores) {
         this.autores = autores != null ? autores : new HashSet<>();
-        this.autores.forEach(a -> a.addLibro(this));
     }
 
     public Set<Autor> getAutores() {
         return autores;
     }
+
+
+    public long getId() {
+        return id;
+    }
+
+
 
     public long getId_guten() {
         return id_guten;

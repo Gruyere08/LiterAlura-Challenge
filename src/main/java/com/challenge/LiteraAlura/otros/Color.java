@@ -10,4 +10,5 @@ public class Color {
     public static final String MORADO = "\033[0;35m";
     public static final String CYAN = "\033[0;36m";
     public static final String BLANCO = "\033[0;37m";
+    public static final String VERDE_CLARO = "\033[1;32m";
 }

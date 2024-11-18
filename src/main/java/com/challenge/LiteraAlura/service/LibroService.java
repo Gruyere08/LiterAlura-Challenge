@@ -7,6 +7,7 @@ import com.challenge.LiteraAlura.repository.AutorRepository;
 import com.challenge.LiteraAlura.repository.LibroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,11 @@ public class LibroService {
             return;
         }
 
+        System.out.println("ID ANTES DE INSERTAR: "+ libro.getId());
+        libroRepository.save(libro);
+        libro = libroRepository.findByTitulo(libro.getTitulo()).get();
+        System.out.println("ID DESPUES DE INSERTAR: "+ libro.getId());
+
 
         //procesamos los autores
         Set<Autor> autoresParaAgregar = new HashSet<>();
@@ -48,9 +54,12 @@ public class LibroService {
                 System.out.println("AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre());
             }else {
                 autor = new Autor(datoAutor);
-                autorRepository.save(autor);
                 System.out.println("NUEVO AUTOR REGISTRADO: " + autor.getNombre());
+                autorRepository.save(autor);
+                autor = autorRepository.findByNombre(autor.getNombre()).get();
+
             }
+            autor.addLibro(libro);
             autoresParaAgregar.add(autor);
         }
 
@@ -65,8 +74,9 @@ public class LibroService {
         return libroRepository.findAll();
     }
 
+    @Transactional
     public List<Autor> traerTodosLosautores(){
-        return autorRepository.findAll();
+        return autorRepository.findAllWithLibros();
     }
 
 

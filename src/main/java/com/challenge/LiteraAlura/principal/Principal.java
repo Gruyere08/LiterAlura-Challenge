@@ -1,5 +1,6 @@
 package com.challenge.LiteraAlura.principal;
 
+import com.challenge.LiteraAlura.model.Autor;
 import com.challenge.LiteraAlura.model.Datos;
 import com.challenge.LiteraAlura.model.DatosLibro;
 import com.challenge.LiteraAlura.model.Libro;
@@ -56,7 +57,7 @@ public class Principal {
                     listarTodosLosLibros();
                     break;
                 case 3:
-                    //codigo
+                    listarTodosLosAutores();
                     break;
                 case 4:
                     //codigo
@@ -129,6 +130,12 @@ public class Principal {
 
     public void listarTodosLosLibros(){
         List<Libro> LibrosAMostrar = libroService.traerTodosLosLibros();
+        LibrosAMostrar.forEach(System.out::println);
+
+    }
+
+    public void listarTodosLosAutores(){
+        List<Autor> LibrosAMostrar = libroService.traerTodosLosautores();
         LibrosAMostrar.forEach(System.out::println);
 
     }
