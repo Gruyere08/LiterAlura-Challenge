@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -25,6 +26,7 @@ public class Principal {
     private final String URL_BASE = "https://gutendex.com/books";
     private ConvierteDatos conversor = new ConvierteDatos();
     private LibroService libroService;
+    private final int OPCIONES_POR_PAGINA = 5;
 
 
     @Autowired
@@ -75,34 +77,48 @@ public class Principal {
     }
 
     public void buscarLibroWeb(){
+        // ZONA DE CONSULTA API
         System.out.println("---------- BUSQUEDA DE LIBROS ----------");
         System.out.println(Color.AZUL + "Escriba palabras clave que quiera buscar, separando con espacios cada palabra");
-        System.out.println(Color.MORADO + "*Se mostraran los primeros 10 resultados*" + Color.RESET);
+        System.out.println(Color.MORADO + "*Se mostraran los primeros " + OPCIONES_POR_PAGINA +" resultados*" + Color.RESET);
 
-        var palabrasClave = teclado.nextLine();
+        var palabrasClave = solicitarString();
         var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
-        //imprimirLindo(json);
         Datos datos = conversor.obtenerDatos(json, Datos.class);
 
-        if (datos.datosLibro().size() > 0) {
-            List<DatosLibro> opciones = datos.datosLibro().stream()
-                    .limit(10)
-                    .collect(Collectors.toList());
 
-            AtomicInteger contador = new AtomicInteger(1);
-            System.out.println("---------- RESULTADOS ----------");
-            opciones.stream().forEach(s -> {
-                int contadorActual = contador.getAndIncrement();
-                System.out.println(Color.AZUL + contadorActual + " - " + s.titulo());
-                System.out.println(Color.CYAN + "----------------- POR: " + s.autoresToString() + Color.RESET);
-            });
 
-            System.out.println(Color.ROJO + "\n0. SALIR" + Color.RESET);
 
-            System.out.println("ELIJA UNA OPCION: ");
-            int opcion = -1;
+        //ZONA DE MANEJO DE PAGINAS
+
+        if (!datos.datosLibro().isEmpty()) {
+            List<List<DatosLibro>> paginas = dividirLista(datos.datosLibro(), OPCIONES_POR_PAGINA);
+            int indicePagina = 0;
+
+
+
+
             while (true){
-                opcion = teclado.nextInt();
+                List<DatosLibro> opciones = paginas.get(indicePagina);
+                AtomicInteger contador = new AtomicInteger(1 + (indicePagina*OPCIONES_POR_PAGINA));
+                System.out.println("---------- RESULTADOS ----------");
+                opciones.stream().forEach(s -> {
+                    int contadorActual = contador.getAndIncrement();
+                    System.out.println(Color.AZUL + contadorActual + " - " + s.titulo());
+                    System.out.println(Color.CYAN + "----------------- POR: " + s.autoresToString() + Color.RESET);
+                });
+
+                System.out.println("\n");
+                System.out.println("PAGINA: " + (indicePagina + 1) +"/" + paginas.size());
+                if (indicePagina != 0) {System.out.println(Color.MORADO + (opciones.size() + 1) + ". PAGINA ANTERIOR");}
+                if (indicePagina != paginas.size() - 1) {System.out.println(Color.MORADO + (opciones.size() + 2) +". PAGINA SIGUIENTE");}
+                System.out.println(Color.MORADO + (opciones.size() + 3) + ". AGREGAR TODOS");
+                System.out.println(Color.ROJO + "0. SALIR" + Color.RESET);
+
+                System.out.println("ELIJA UNA OPCION: ");
+                int opcion = -1;
+                opcion = solicitarEntero(0, (opciones.size() + 3));
+
                 if (opcion > 0 && opcion <= opciones.size()){
                     opcion --;
                     DatosLibro libroElegido = opciones.get(opcion);
@@ -116,6 +132,28 @@ public class Principal {
 
                     return;
                 } else if (opcion == 0) {
+                    return;
+                } else if (opcion == opciones.size() + 1) {
+                    //Volver a pagina anterior
+                    if (indicePagina == 0){
+                        System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
+                        continue;
+                    } else {
+                        indicePagina --;
+                        continue;
+                    }
+                } else if (opcion == opciones.size() + 2) {
+                    if (indicePagina == paginas.size() -1){
+                        System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
+                        continue;
+                    } else {
+                        indicePagina ++;
+                        continue;
+                    }
+                } else if (opcion == opciones.size() + 3) {
+                    System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
+                    List<Libro> librosAgregar = opciones.stream().map(Libro::new).toList();
+                    librosAgregar.forEach(l -> libroService.guardarLibroConAutores(l,opciones.get(librosAgregar.indexOf(l)).datosAutor()));
                     return;
                 }
             }
@@ -161,13 +199,35 @@ public class Principal {
                 if (entero >= limiteInferior && entero <= limiteSuperior){
                     break;
                 }
-                System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido" + Color.RESET);
+                System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
             }catch (InputMismatchException e){
-                System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido" + Color.RESET);
+                System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
                 teclado.nextLine();
             }
         }
         return entero;
+    }
+
+
+    public String solicitarString() {
+        String input;
+        while (true) {
+            input = teclado.nextLine(); // Read input
+            if (input.trim().isEmpty()) {
+                System.out.println(Color.ROJO + "*El valor ingresado no puede estar vacío." + Color.RESET);
+            } else {
+                return input;  // Return the valid string
+            }
+        }
+    }
+
+
+    public static List<List<DatosLibro>> dividirLista(List<DatosLibro> lista, int tamanoGrupo) {
+        List<List<DatosLibro>> listasParticionadas = new ArrayList<>();
+        for (int i = 0; i < lista.size(); i += tamanoGrupo) {
+            listasParticionadas.add(lista.subList(i, Math.min(i + tamanoGrupo, lista.size())));
+        }
+        return listasParticionadas;
     }
 
 
