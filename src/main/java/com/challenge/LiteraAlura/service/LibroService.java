@@ -3,6 +3,7 @@ package com.challenge.LiteraAlura.service;
 import com.challenge.LiteraAlura.model.Autor;
 import com.challenge.LiteraAlura.model.DatosAutor;
 import com.challenge.LiteraAlura.model.Libro;
+import com.challenge.LiteraAlura.otros.Color;
 import com.challenge.LiteraAlura.repository.AutorRepository;
 import com.challenge.LiteraAlura.repository.LibroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,12 @@ public class LibroService {
         //Buscamos si el libro existe
         Optional<Libro> libroExistente = libroRepository.findByTitulo(libro.getTitulo());
         if (libroExistente.isPresent()){
-            System.out.println("El libro elegido ya existe en la base de datos");
+            System.out.println(Color.MORADO + "El libro "+ "\"" + libroExistente.get().getTitulo() +"\""  +" ya existe en la base de datos" + Color.RESET);
             return;
         }
 
-        System.out.println("ID ANTES DE INSERTAR: "+ libro.getId());
         libroRepository.save(libro);
         libro = libroRepository.findByTitulo(libro.getTitulo()).get();
-        System.out.println("ID DESPUES DE INSERTAR: "+ libro.getId());
-
 
         //procesamos los autores
         Set<Autor> autoresParaAgregar = new HashSet<>();
@@ -51,10 +49,10 @@ public class LibroService {
 
             if(autorExistente.isPresent()){
                 autor = autorExistente.get();
-                System.out.println("AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre());
+                System.out.println( Color.VERDE + "AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre() + Color.RESET);
             }else {
                 autor = new Autor(datoAutor);
-                System.out.println("NUEVO AUTOR REGISTRADO: " + autor.getNombre());
+                System.out.println(Color.CYAN + "NUEVO AUTOR REGISTRADO: " + autor.getNombre() + Color.RESET );
                 autorRepository.save(autor);
                 autor = autorRepository.findByNombre(autor.getNombre()).get();
 
@@ -65,7 +63,7 @@ public class LibroService {
 
         libro.setAutores(autoresParaAgregar);
         libroRepository.save(libro);
-        System.out.println("NUEVO LIBRO REGISTRADO: " + libro.getTitulo());
+        System.out.println(Color.CYAN + "NUEVO LIBRO REGISTRADO: " + libro.getTitulo() + Color.RESET);
         return;
     }
 

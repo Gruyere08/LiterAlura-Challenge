@@ -1,5 +1,6 @@
 package com.challenge.LiteraAlura.principal;
 
+import com.challenge.LiteraAlura.configuration.DynamicConfig;
 import com.challenge.LiteraAlura.model.Autor;
 import com.challenge.LiteraAlura.model.Datos;
 import com.challenge.LiteraAlura.model.DatosLibro;
@@ -26,7 +27,7 @@ public class Principal {
     private final String URL_BASE = "https://gutendex.com/books";
     private ConvierteDatos conversor = new ConvierteDatos();
     private LibroService libroService;
-    private final int OPCIONES_POR_PAGINA = 5;
+    private final int OPCIONES_POR_PAGINA = Integer.parseInt(DynamicConfig.get("cantidad.opciones"));
 
 
     @Autowired
@@ -45,9 +46,10 @@ public class Principal {
                     3 - Listar autores registrados
                     4 - Listar autores vivos en un determinado año
                     5 - Listar libros por idioma
-                    %s              
+                    %s
+                    9 - Configuraciones %s              
                     0 - Salir %s
-                    """, Color.AZUL, Color.ROJO, Color.RESET);
+                    """, Color.CYAN, Color.MORADO, Color.ROJO, Color.RESET);
             System.out.println(menu);
             opcion = solicitarEntero(0, 5);
 
@@ -123,7 +125,7 @@ public class Principal {
                     opcion --;
                     DatosLibro libroElegido = opciones.get(opcion);
                     System.out.println("---------- SU ELECCION ----------");
-                    System.out.println("EL LIBRO ELEGIDO FUE: ");
+                    System.out.println(Color.MORADO + "EL LIBRO ELEGIDO FUE: ");
                     System.out.println(Color.AZUL + "---> " + libroElegido.titulo());
                     System.out.println(Color.CYAN + "----------------- POR: " + libroElegido.autoresToString() + Color.RESET);
                     System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
@@ -151,6 +153,14 @@ public class Principal {
                         continue;
                     }
                 } else if (opcion == opciones.size() + 3) {
+                    for(DatosLibro dato : opciones){
+                        System.out.println("---------- SU ELECCION ----------");
+                        System.out.println(Color.MORADO + "SE ELIGIERON LOS SIGUIENTES LIBROS: ");
+                        System.out.println(Color.AZUL + "---> " + dato.titulo());
+                        System.out.println(Color.CYAN + "----------------- POR: " + dato.autoresToString() + Color.RESET);
+                    }
+
+
                     System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
                     List<Libro> librosAgregar = opciones.stream().map(Libro::new).toList();
                     librosAgregar.forEach(l -> libroService.guardarLibroConAutores(l,opciones.get(librosAgregar.indexOf(l)).datosAutor()));
