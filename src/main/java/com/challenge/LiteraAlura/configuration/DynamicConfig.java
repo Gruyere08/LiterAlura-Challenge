@@ -26,8 +26,10 @@ public class DynamicConfig {
 
     // Create a default configuration file with default parameters
     private static void createDefaultConfig(File configFile) {
-        System.out.println("Config file not found. Creating a new config with default values...");
-        properties.setProperty("cantidad.opciones", "5");
+        System.out.println("No se encontró el archivo de configuraciones, creando un archivo por defecto...");
+        properties.setProperty("cantidad_opciones", "5");
+        properties.setProperty("ocultarAutoresSinLibros", "true");
+        properties.setProperty("ocultarLibrosSinAutores", "true");
 
 
         // Write the default properties to the new file

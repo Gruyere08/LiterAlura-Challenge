@@ -56,6 +56,10 @@ public class Autor {
                 .map(Libro::getTitulo)  // Extract the "titulo" of each libro
                 .toList();
 
+        if (listaPopulares.isEmpty()){
+            return "No hay libros registrados para este autor";
+        }
+
         if(listaPopulares.size() == 1){
             return listaPopulares.get(0);
         }

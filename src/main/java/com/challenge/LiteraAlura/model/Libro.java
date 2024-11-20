@@ -11,7 +11,7 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long id_guten;
-    @Column(unique = true, nullable = false)
+    @Column(length = 1000, unique = true, nullable = false)
     private String titulo;
     private List<String> temas;
 

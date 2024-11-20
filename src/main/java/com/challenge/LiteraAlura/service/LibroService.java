@@ -1,5 +1,6 @@
 package com.challenge.LiteraAlura.service;
 
+import com.challenge.LiteraAlura.configuration.DynamicConfig;
 import com.challenge.LiteraAlura.model.Autor;
 import com.challenge.LiteraAlura.model.DatosAutor;
 import com.challenge.LiteraAlura.model.Libro;
@@ -21,6 +22,10 @@ public class LibroService {
     private LibroRepository libroRepository;
 
     private AutorRepository autorRepository;
+
+    private static boolean ocultarAutoresSinLibros = Boolean.parseBoolean(DynamicConfig.get("ocultarAutoresSinLibros"));
+
+    private static boolean ocultarLibrosSinAutores = Boolean.parseBoolean(DynamicConfig.get("ocultarLibrosSinAutores"));
 
     @Autowired
     public LibroService(LibroRepository libroRepository, AutorRepository autorRepository){
@@ -74,12 +79,50 @@ public class LibroService {
 
     @Transactional
     public List<Autor> traerTodosLosautores(){
-        return autorRepository.findAllWithLibros();
+        if (ocultarAutoresSinLibros){
+            System.out.println("Se ignoraron los que no tienen libros");
+            return autorRepository.findAllWithLibros();
+        }else {
+            System.out.println("Se buscaron todos los autores");
+            return autorRepository.findAll();
+        }
+
     }
+
+    public void borrarTodosLosLibros(){
+        libroRepository.deleteAllLibros();
+    }
+
+
+    public void borrarTodosLosaAutores(){
+        autorRepository.deleteAllAutores();
+    }
+
+
+
+
 
     public List<Autor> traerAutoresVivosEnAnio(int anio){
         return autorRepository.findAutoresVivosEnAnio(anio);
     }
 
+    public static boolean isOcultarAutoresSinLibros() {
+        return ocultarAutoresSinLibros;
+    }
 
+    public static void toggleOcultarAutoresSinLibros() {
+        ocultarAutoresSinLibros = !ocultarAutoresSinLibros ;
+        DynamicConfig.set("ocultarAutoresSinLibros",Boolean.toString(ocultarAutoresSinLibros));
+        DynamicConfig.save();
+    }
+
+    public static boolean isOcultarLibrosSinAutores() {
+        return ocultarLibrosSinAutores;
+    }
+
+    public static void toggleOcultarLibrosSinAutores() {
+        ocultarLibrosSinAutores = !ocultarLibrosSinAutores ;
+        DynamicConfig.set("ocultarLibrosSinAutores",Boolean.toString(ocultarLibrosSinAutores));
+        DynamicConfig.save();
+    }
 }
