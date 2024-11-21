@@ -8,8 +8,7 @@ import java.util.ArrayList;
 
 public class Lenguaje {
 
-    // Static final attribute containing the language code and name mapping as a list of entries
-    public static final List<Entry<String, String>> LANGUAGE_CODES = List.<Entry<String, String>>of(
+    public static final List<Entry<String, String>> CODIGOS_LENGUAJE = List.<Entry<String, String>>of(
             new SimpleEntry<>("en", "Inglés"),
             new SimpleEntry<>("es", "Español"),
             new SimpleEntry<>("fr", "Francés"),
@@ -76,7 +75,7 @@ public class Lenguaje {
             new SimpleEntry<>("ky", "Kirguís"),
             new SimpleEntry<>("ps", "Pastún"),
             new SimpleEntry<>("so", "Somalí"),
-            new SimpleEntry<>("iw", "Hebreo")
+            new SimpleEntry<>("tl", "Tagalo")
     );
 
 }

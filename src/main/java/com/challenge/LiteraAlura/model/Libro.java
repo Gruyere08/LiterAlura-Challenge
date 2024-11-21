@@ -1,8 +1,10 @@
 package com.challenge.LiteraAlura.model;
 import com.challenge.LiteraAlura.otros.Color;
+import com.challenge.LiteraAlura.otros.Lenguaje;
 import jakarta.persistence.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "libros")
@@ -16,7 +18,7 @@ public class Libro {
     private List<String> temas;
 
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "libros_lenguajes", // Name of the secondary table
             joinColumns = @JoinColumn(name = "libro_id") // Foreign key to the primary table
@@ -53,6 +55,36 @@ public class Libro {
                 Color.MORADO +"Descargas: " + descargas + Color.RESET;
     }
 
+
+    public String toStringConLenguajes() {
+        return "---------- LIBRO ---------- \n"+
+                Color.AZUL +"Titulo: " + titulo + "\n"+
+                Color.CYAN+ "Autores: " + autoresToString() + "\n" +
+                Color.VERDE_CLARO +"Lenguajes: " + lenguajesToString() + Color.RESET;
+    }
+
+    public String lenguajesToString(){
+        if (lenguajes.isEmpty()){
+            return "No se tiene informacion sobre los lenguajes";
+        }
+        return lenguajes.stream()
+                .map(Libro::findLanguageName)
+                .filter(Optional::isPresent) // Only keep matches
+                .map(Optional::get)         // Extract the language name
+                .collect(Collectors.joining(", "));
+    }
+
+
+    private static Optional<String> findLanguageName(String code) {
+        return Lenguaje.CODIGOS_LENGUAJE.stream()
+                .filter(entry -> entry.getKey().equals(code))
+                .map(Map.Entry::getValue)
+                .findFirst();
+    }
+
+
+
+
     public String autoresToString(){
         StringBuilder stringAutores = new StringBuilder();
         int size = autores.size();
@@ -66,8 +98,6 @@ public class Libro {
         while (iterador.hasNext()) {
             Autor autor = iterador.next();
             count++;
-
-
 
             if (size == 1){
                 return autor.getNombre();

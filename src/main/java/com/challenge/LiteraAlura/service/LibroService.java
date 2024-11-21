@@ -46,6 +46,8 @@ public class LibroService {
         libroRepository.save(libro);
         libro = libroRepository.findByTitulo(libro.getTitulo()).get();
 
+
+
         //procesamos los autores
         Set<Autor> autoresParaAgregar = new HashSet<>();
         for(DatosAutor datoAutor : datosAutor){
@@ -99,11 +101,13 @@ public class LibroService {
     }
 
 
-
-
-
     public List<Autor> traerAutoresVivosEnAnio(int anio){
         return autorRepository.findAutoresVivosEnAnio(anio);
+    }
+
+
+    public List<Libro> traerLibrosPorLenguaje(String lenguaje){
+        return libroRepository.findByLenguaje(lenguaje);
     }
 
     public static boolean isOcultarAutoresSinLibros() {

@@ -6,6 +6,7 @@ import com.challenge.LiteraAlura.model.Datos;
 import com.challenge.LiteraAlura.model.DatosLibro;
 import com.challenge.LiteraAlura.model.Libro;
 import com.challenge.LiteraAlura.otros.Color;
+import com.challenge.LiteraAlura.otros.Lenguaje;
 import com.challenge.LiteraAlura.service.ConsumoAPI;
 import com.challenge.LiteraAlura.service.ConvierteDatos;
 import com.challenge.LiteraAlura.service.LibroService;
@@ -13,10 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Principal {
@@ -66,7 +64,7 @@ public class Principal {
                     listarAutoresVivosEnAnio();
                     break;
                 case 5:
-                    //codigo
+                    listarLibrosPorIdioma();
                     break;
                 case 9:
                     mostrarMenuDeConfiguraciones();
@@ -99,10 +97,12 @@ public class Principal {
 
             while (true){
                 List<DatosLibro> opciones = paginas.get(indicePagina);
-                AtomicInteger contador = new AtomicInteger(1 + (indicePagina* OpcionesPorPagina));
+                //AtomicInteger contador = new AtomicInteger(1 + (indicePagina* OpcionesPorPagina));
+
                 System.out.println("---------- RESULTADOS ----------");
-                opciones.stream().forEach(s -> {
-                    int contadorActual = contador.getAndIncrement();
+                int[] contador = {1 + (indicePagina* OpcionesPorPagina)};
+                opciones.forEach(s -> {
+                    int contadorActual = contador[0]++;
                     System.out.println(Color.AZUL + contadorActual + " - " + s.titulo());
                     System.out.println(Color.CYAN + "----------------- POR: " + s.autoresToString() + Color.RESET);
                 });
@@ -232,6 +232,69 @@ public class Principal {
         System.out.println("---------- AUTORES VIVOS EN EL AÑO " + anio + " ----------");
         autoresAMostrar.forEach(System.out::println);
     }
+
+    public void listarLibrosPorIdioma(){
+
+        List<List<Map.Entry<String, String>>> paginas = dividirLista(Lenguaje.CODIGOS_LENGUAJE , OpcionesPorPagina);
+        int indicePagina = 0;
+
+        while (true){
+
+            System.out.println("---------- BUSQUEDA DE LIBROS POR IDIOMA ----------");
+            System.out.println(Color.MORADO + "*Seleccione el idioma por el cual desea filtrar los libros*" + Color.RESET);
+            List<Map.Entry<String, String>> opciones = paginas.get(indicePagina);
+
+            int[] contador = {1 + (indicePagina* OpcionesPorPagina)};
+            opciones.forEach(s -> {
+                int contadorActual = contador[0]++;
+                System.out.println(Color.AZUL + contadorActual + " - " + s.getValue() + Color.RESET);
+            });
+
+            System.out.println("\n");
+            System.out.println("PAGINA: " + (indicePagina + 1) +"/" + paginas.size());
+            if (indicePagina != 0) {System.out.println(Color.VERDE_CLARO + (opciones.size() + 1) + ". Pagina ANTERIOR");}
+            if (indicePagina != paginas.size() - 1) {System.out.println(Color.VERDE_CLARO + (opciones.size() + 2) +". Pagina SIGUIENTE");}
+            System.out.println(Color.ROJO + "0. SALIR" + Color.RESET);
+
+            System.out.println("ELIJA UNA OPCION: ");
+            int opcion = -1;
+            opcion = solicitarEntero(0, (opciones.size() + 2));
+
+            if (opcion > 0 && opcion <= opciones.size()){
+                opcion--;
+                List<Libro> librosFiltrados = libroService.traerLibrosPorLenguaje(opciones.get(opcion).getKey());
+                System.out.println("---------- RESULTADOS DE BUSQUEDA POR IDIOMA ----------");
+                if (librosFiltrados.isEmpty()){
+                    System.out.println(Color.ROJO+ "*No se encontraron libros del idioma seleccionado*");
+                    return;
+                }
+                librosFiltrados.forEach(l -> System.out.println(l.toStringConLenguajes()));
+                return;
+            } else if (opcion == 0) {
+                return;
+            } else if (opcion == opciones.size() + 1) {
+                //Volver a pagina anterior
+                if (indicePagina == 0){
+                    System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
+                    continue;
+                } else {
+                    indicePagina --;
+                    continue;
+                }
+            } else if (opcion == opciones.size() + 2) {
+                if (indicePagina == paginas.size() -1){
+                    System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
+                    continue;
+                } else {
+                    indicePagina ++;
+                    continue;
+                }
+            }
+
+        }
+    }
+
+
 
 
     public void mostrarMenuDeConfiguraciones(){
