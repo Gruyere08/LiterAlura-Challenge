@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -211,13 +213,16 @@ public class Principal {
 
     public void listarTodosLosLibros(){
         List<Libro> librosAMostrar = libroService.traerTodosLosLibros();
-        librosAMostrar.forEach(System.out::println);
+        String prompt = "---------- LIBROS REGISTRADOS ----------";
+        organizarEnPaginas(librosAMostrar, Libro::toString, false, false, prompt);
 
     }
 
     public void listarTodosLosAutores(){
         List<Autor> autoresAMostrar = libroService.traerTodosLosautores();
-        autoresAMostrar.forEach(System.out::println);
+        String prompt = "---------- AUTORES REGISTRADOS ----------";
+        organizarEnPaginas(autoresAMostrar, Autor::toString, false, false, prompt);
+
 
     }
 
@@ -229,71 +234,102 @@ public class Principal {
         int anio = teclado.nextInt();
         teclado.nextLine();
         List<Autor> autoresAMostrar = libroService.traerAutoresVivosEnAnio(anio);
-        System.out.println("---------- AUTORES VIVOS EN EL AÑO " + anio + " ----------");
-        autoresAMostrar.forEach(System.out::println);
+        String prompt = "---------- AUTORES VIVOS EN EL AÑO " + anio + " ----------";
+        organizarEnPaginas(autoresAMostrar, Autor::toString, false, false, prompt);
     }
 
     public void listarLibrosPorIdioma(){
+        String prompt = String.format("""
+                ---------- BUSQUEDA DE LIBROS POR IDIOMA ----------
+                %s"*Seleccione el idioma por el cual desea filtrar los libros*"%s
+                """, Color.MORADO, Color.RESET) ;
 
-        List<List<Map.Entry<String, String>>> paginas = dividirLista(Lenguaje.CODIGOS_LENGUAJE , OpcionesPorPagina);
+        List<Map.Entry<String,String>> idiomasBuscar = organizarEnPaginas(Lenguaje.CODIGOS_LENGUAJE, Map.Entry::getValue, true, false, prompt);
+
+        if (idiomasBuscar.isEmpty()){
+            return;
+        }
+
+        List<Libro> librosFiltrados = libroService.traerLibrosPorLenguaje(idiomasBuscar.get(0).getKey());
+        prompt = "---------- RESULTADOS DE BUSQUEDA POR IDIOMA ----------";
+        if (librosFiltrados.isEmpty()){
+               System.out.println(Color.ROJO+ "*No se encontraron libros del idioma seleccionado*");
+               return;
+        }
+        organizarEnPaginas(librosFiltrados, Libro::toStringConLenguajes, false, false, prompt);
+
+    }
+
+
+    public <T> List<T> organizarEnPaginas(List<T> lista, Function<T,String> metodoImpresion, boolean permitirSeleccion, boolean seleccionMultiple, String prompt){
+        List<List<T>> paginas = dividirLista(lista, OpcionesPorPagina);
         int indicePagina = 0;
+        List<T> listaFinal = new ArrayList<>();
 
         while (true){
-
-            System.out.println("---------- BUSQUEDA DE LIBROS POR IDIOMA ----------");
-            System.out.println(Color.MORADO + "*Seleccione el idioma por el cual desea filtrar los libros*" + Color.RESET);
-            List<Map.Entry<String, String>> opciones = paginas.get(indicePagina);
-
+            System.out.println(prompt);
+            List<T> opciones = paginas.get(indicePagina);
             int[] contador = {1 + (indicePagina* OpcionesPorPagina)};
             opciones.forEach(s -> {
                 int contadorActual = contador[0]++;
-                System.out.println(Color.AZUL + contadorActual + " - " + s.getValue() + Color.RESET);
+                System.out.println(Color.AZUL + contadorActual + " - " + metodoImpresion.apply(s) + Color.RESET);
             });
 
             System.out.println("\n");
             System.out.println("PAGINA: " + (indicePagina + 1) +"/" + paginas.size());
-            if (indicePagina != 0) {System.out.println(Color.VERDE_CLARO + (opciones.size() + 1) + ". Pagina ANTERIOR");}
-            if (indicePagina != paginas.size() - 1) {System.out.println(Color.VERDE_CLARO + (opciones.size() + 2) +". Pagina SIGUIENTE");}
-            System.out.println(Color.ROJO + "0. SALIR" + Color.RESET);
+            if (indicePagina != 0) {System.out.println(Color.VERDE_CLARO + (OpcionesPorPagina + 1) + ". Pagina ANTERIOR");}
+            if (indicePagina != paginas.size() - 1) {System.out.println(Color.VERDE_CLARO + (OpcionesPorPagina + 2) +". Pagina SIGUIENTE");}
 
-            System.out.println("ELIJA UNA OPCION: ");
-            int opcion = -1;
-            opcion = solicitarEntero(0, (opciones.size() + 2));
+            if (seleccionMultiple && permitirSeleccion){
+                System.out.println(Color.MORADO + (OpcionesPorPagina + 3) + ". Seleccionar todos los elementos de esta pagina");
+                System.out.println(Color.CYAN + (OpcionesPorPagina + 4) + ". Seleccionar TODOS los elementos");
+            }
+
+            System.out.println(Color.ROJO + "0. SALIR" + Color.RESET);
+            if (permitirSeleccion){System.out.println("ELIJA UNA OPCION: ");}
+            int limite;
+
+            if (permitirSeleccion && seleccionMultiple){
+                limite = OpcionesPorPagina + 4;
+            } else  {
+                limite = OpcionesPorPagina + 2;
+            }
+
+            int opcion = solicitarEntero(0,limite);
 
             if (opcion > 0 && opcion <= opciones.size()){
-                opcion--;
-                List<Libro> librosFiltrados = libroService.traerLibrosPorLenguaje(opciones.get(opcion).getKey());
-                System.out.println("---------- RESULTADOS DE BUSQUEDA POR IDIOMA ----------");
-                if (librosFiltrados.isEmpty()){
-                    System.out.println(Color.ROJO+ "*No se encontraron libros del idioma seleccionado*");
-                    return;
+                if (!permitirSeleccion){
+                    System.out.println(Color.ROJO + "*No está permitida la seleccion en esta funcion*");
+                    continue;
                 }
-                librosFiltrados.forEach(l -> System.out.println(l.toStringConLenguajes()));
-                return;
+                opcion--;
+                listaFinal.add(opciones.get(opcion));
+                return listaFinal;
             } else if (opcion == 0) {
-                return;
-            } else if (opcion == opciones.size() + 1) {
+                return listaFinal;
+            } else if (opcion == OpcionesPorPagina + 1) {
                 //Volver a pagina anterior
                 if (indicePagina == 0){
                     System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
-                    continue;
                 } else {
                     indicePagina --;
-                    continue;
                 }
-            } else if (opcion == opciones.size() + 2) {
+                continue;
+            } else if (opcion == OpcionesPorPagina + 2) {
                 if (indicePagina == paginas.size() -1){
                     System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
-                    continue;
                 } else {
                     indicePagina ++;
-                    continue;
                 }
+                continue;
+            } else if (opcion == OpcionesPorPagina + 3) {
+                return opciones;
+            } else if (opcion == OpcionesPorPagina + 4) {
+                return lista;
             }
-
         }
-    }
 
+    }
 
 
 
