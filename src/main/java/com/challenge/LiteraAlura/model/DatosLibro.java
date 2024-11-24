@@ -1,6 +1,7 @@
 package com.challenge.LiteraAlura.model;
 
 
+import com.challenge.LiteraAlura.otros.Color;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -32,4 +33,9 @@ public record DatosLibro(
         }
     }
 
+    @Override
+    public String toString() {
+        return Color.AZUL + this.titulo() + "\n" +
+                Color.CYAN + "----------------- POR: " + this.autoresToString() + Color.RESET;
+    }
 }

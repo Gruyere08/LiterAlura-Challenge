@@ -28,7 +28,7 @@ public class Libro {
     private long descargas;
 
 
-    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE} , fetch = FetchType.EAGER)
     @JoinTable(
             name = "libros_autores",
             joinColumns = @JoinColumn(name = "libro_id"),
@@ -61,6 +61,12 @@ public class Libro {
                 Color.AZUL +"Titulo: " + titulo + "\n"+
                 Color.CYAN+ "Autores: " + autoresToString() + "\n" +
                 Color.VERDE_CLARO +"Lenguajes: " + lenguajesToString() + Color.RESET;
+    }
+
+
+    public String toStringSeleccion() {
+        return Color.AZUL + this.titulo + "\n" +
+                Color.CYAN + "----------------- POR: " + this.autoresToString() + Color.RESET;
     }
 
     public String lenguajesToString(){

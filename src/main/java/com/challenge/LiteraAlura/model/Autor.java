@@ -25,7 +25,7 @@ public class Autor {
     @Column(nullable = true)
     private Integer anio_fallecimiento;
 
-    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER, mappedBy = "autores")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE} , fetch = FetchType.EAGER, mappedBy = "autores")
     private Set<Libro> libros = new HashSet<>();
 
     private static int cantidadPopulares = 3;
@@ -89,6 +89,10 @@ public class Autor {
         this.libros.add(libro);
     }
 
+
+    public long getId() {
+        return id;
+    }
 
     public String getNombre() {
         return nombre;

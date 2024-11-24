@@ -15,9 +15,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -90,118 +88,130 @@ public class Principal {
         var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + palabrasClave.replace(" ", "%20"));
         Datos datos = conversor.obtenerDatos(json, Datos.class);
 
-
-        //ZONA DE MANEJO DE PAGINAS
-
         if (!datos.datosLibro().isEmpty()) {
-            List<List<DatosLibro>> paginas = dividirLista(datos.datosLibro(), OpcionesPorPagina);
-            int indicePagina = 0;
-
-            while (true){
-                List<DatosLibro> opciones = paginas.get(indicePagina);
-                //AtomicInteger contador = new AtomicInteger(1 + (indicePagina* OpcionesPorPagina));
-
-                System.out.println("---------- RESULTADOS ----------");
-                int[] contador = {1 + (indicePagina* OpcionesPorPagina)};
-                opciones.forEach(s -> {
-                    int contadorActual = contador[0]++;
-                    System.out.println(Color.AZUL + contadorActual + " - " + s.titulo());
-                    System.out.println(Color.CYAN + "----------------- POR: " + s.autoresToString() + Color.RESET);
-                });
-
-                System.out.println("\n");
-                System.out.println("PAGINA: " + (indicePagina + 1) +"/" + paginas.size());
-                if (indicePagina != 0) {System.out.println(Color.VERDE_CLARO + (opciones.size() + 1) + ". Pagina ANTERIOR");}
-                if (indicePagina != paginas.size() - 1) {System.out.println(Color.VERDE_CLARO + (opciones.size() + 2) +". Pagina SIGUIENTE");}
-                System.out.println(Color.MORADO + (opciones.size() + 3) + ". Agregar todos los libros de esta pagina");
-                System.out.println(Color.CYAN + (opciones.size() + 4) + ". Agregar TODOS los libros");
-                System.out.println(Color.ROJO + "0. SALIR" + Color.RESET);
-
-                System.out.println("ELIJA UNA OPCION: ");
-                int opcion = -1;
-                opcion = solicitarEntero(0, (opciones.size() + 4));
-
-                if (opcion > 0 && opcion <= opciones.size()){
-                    opcion --;
-                    DatosLibro libroElegido = opciones.get(opcion);
-                    System.out.println("---------- SU ELECCION ----------");
-                    System.out.println(Color.MORADO + "EL LIBRO ELEGIDO FUE: ");
-                    System.out.println(Color.AZUL + "---> " + libroElegido.titulo());
-                    System.out.println(Color.CYAN + "----------------- POR: " + libroElegido.autoresToString() + Color.RESET);
-                    System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
-                    Libro libroAGuardar = new Libro(libroElegido);
-                    libroService.guardarLibroConAutores(libroAGuardar, libroElegido.datosAutor());
-
-                    return;
-                } else if (opcion == 0) {
-                    return;
-                } else if (opcion == opciones.size() + 1) {
-                    //Volver a pagina anterior
-                    if (indicePagina == 0){
-                        System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
-                        continue;
-                    } else {
-                        indicePagina --;
-                        continue;
-                    }
-                } else if (opcion == opciones.size() + 2) {
-                    if (indicePagina == paginas.size() -1){
-                        System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
-                        continue;
-                    } else {
-                        indicePagina ++;
-                        continue;
-                    }
-                } else if (opcion == opciones.size() + 3) {
-                    for(DatosLibro dato : opciones){
-                        System.out.println("---------- SU ELECCION ----------");
-                        System.out.println(Color.MORADO + "SE ELIGIERON LOS SIGUIENTES LIBROS: ");
-                        System.out.println(Color.AZUL + "---> " + dato.titulo());
-                        System.out.println(Color.CYAN + "----------------- POR: " + dato.autoresToString() + Color.RESET);
-                    }
-
-
-                    System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
-                    List<Libro> librosAgregar = opciones.stream().map(Libro::new).toList();
-
-                    for (int i = 0; i < librosAgregar.size(); i++) {
-                        Libro libro = librosAgregar.get(i);
-                        DatosLibro datosLibro = opciones.get(i);
-                        libroService.guardarLibroConAutores(libro, datosLibro.datosAutor());
-                    }
-
-                    return;
-                } else if (opcion == opciones.size() + 4) {
-                    for(List<DatosLibro> listaInterior : paginas){
-                        for (DatosLibro dato : listaInterior){
-                            System.out.println("---------- SU ELECCION ----------");
-                            System.out.println(Color.MORADO + "SE ELIGIERON LOS SIGUIENTES LIBROS: ");
-                            System.out.println(Color.AZUL + "---> " + dato.titulo());
-                            System.out.println(Color.CYAN + "----------------- POR: " + dato.autoresToString() + Color.RESET);
-                        }
-
-                    }
-
-                    System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
-
-                    List<DatosLibro> datosLibrosAgregar = paginas.stream()
-                            .flatMap(List::stream)
-                            .toList();
-
-                    List<Libro> librosAgregar = datosLibrosAgregar.stream()
-                            .map(Libro::new)
-                            .toList();
-
-                    for (int i = 0; i < librosAgregar.size(); i++) {
-                        Libro libro = librosAgregar.get(i);
-                        DatosLibro datosLibro = datosLibrosAgregar.get(i);
-                        libroService.guardarLibroConAutores(libro, datosLibro.datosAutor());
-                    }
-                    return;
-
-
-                }
+            String prompt = "---------- RESULTADOS DE BUSQUEDA ---------- ";
+            List<DatosLibro> librosAgregar = organizarEnPaginas(datos.datosLibro(), DatosLibro::toString, true, true, prompt);
+            if (librosAgregar.isEmpty()){
+                return;
             }
+
+            System.out.println("---------- SU ELECCION ----------");
+            System.out.println(Color.MORADO + "LOS LIBROS ELEGIDOS FUERON: ");
+            librosAgregar.forEach(System.out::println);
+
+            System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
+            librosAgregar.forEach(l -> libroService.guardarLibroConAutores(l));
+            return;
+
+
+//            List<List<DatosLibro>> paginas = dividirLista(datos.datosLibro(), OpcionesPorPagina);
+//            int indicePagina = 0;
+//
+//            while (true){
+//                List<DatosLibro> opciones = paginas.get(indicePagina);
+//                //AtomicInteger contador = new AtomicInteger(1 + (indicePagina* OpcionesPorPagina));
+//
+//                System.out.println("---------- RESULTADOS ----------");
+//                int[] contador = {1 + (indicePagina* OpcionesPorPagina)};
+//                opciones.forEach(s -> {
+//                    int contadorActual = contador[0]++;
+//                    System.out.println(Color.AZUL + contadorActual + " - " + s.titulo());
+//                    System.out.println(Color.CYAN + "----------------- POR: " + s.autoresToString() + Color.RESET);
+//                });
+//
+//                System.out.println("\n");
+//                System.out.println("PAGINA: " + (indicePagina + 1) +"/" + paginas.size());
+//                if (indicePagina != 0) {System.out.println(Color.VERDE_CLARO + (opciones.size() + 1) + ". Pagina ANTERIOR");}
+//                if (indicePagina != paginas.size() - 1) {System.out.println(Color.VERDE_CLARO + (opciones.size() + 2) +". Pagina SIGUIENTE");}
+//                System.out.println(Color.MORADO + (opciones.size() + 3) + ". Agregar todos los libros de esta pagina");
+//                System.out.println(Color.CYAN + (opciones.size() + 4) + ". Agregar TODOS los libros");
+//                System.out.println(Color.ROJO + "0. SALIR" + Color.RESET);
+//
+//                System.out.println("ELIJA UNA OPCION: ");
+//                int opcion = -1;
+//                opcion = solicitarEntero(0, (opciones.size() + 4));
+//
+//                if (opcion > 0 && opcion <= opciones.size()){
+//                    opcion --;
+//                    DatosLibro libroElegido = opciones.get(opcion);
+//                    System.out.println("---------- SU ELECCION ----------");
+//                    System.out.println(Color.MORADO + "EL LIBRO ELEGIDO FUE: ");
+//                    System.out.println(Color.AZUL + "---> " + libroElegido.titulo());
+//                    System.out.println(Color.CYAN + "----------------- POR: " + libroElegido.autoresToString() + Color.RESET);
+//                    System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
+//                    Libro libroAGuardar = new Libro(libroElegido);
+//                    libroService.guardarLibroConAutores(libroAGuardar, libroElegido.datosAutor());
+//
+//                    return;
+//                } else if (opcion == 0) {
+//                    return;
+//                } else if (opcion == opciones.size() + 1) {
+//                    //Volver a pagina anterior
+//                    if (indicePagina == 0){
+//                        System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
+//                        continue;
+//                    } else {
+//                        indicePagina --;
+//                        continue;
+//                    }
+//                } else if (opcion == opciones.size() + 2) {
+//                    if (indicePagina == paginas.size() -1){
+//                        System.out.println(Color.ROJO + "*El valor ingresado no es valido, por favor ingrese un valor valido*" + Color.RESET);
+//                        continue;
+//                    } else {
+//                        indicePagina ++;
+//                        continue;
+//                    }
+//                } else if (opcion == opciones.size() + 3) {
+//                    for(DatosLibro dato : opciones){
+//                        System.out.println("---------- SU ELECCION ----------");
+//                        System.out.println(Color.MORADO + "SE ELIGIERON LOS SIGUIENTES LIBROS: ");
+//                        System.out.println(Color.AZUL + "---> " + dato.titulo());
+//                        System.out.println(Color.CYAN + "----------------- POR: " + dato.autoresToString() + Color.RESET);
+//                    }
+//
+//
+//                    System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
+//                    List<Libro> librosAgregar = opciones.stream().map(Libro::new).toList();
+//
+//                    for (int i = 0; i < librosAgregar.size(); i++) {
+//                        Libro libro = librosAgregar.get(i);
+//                        DatosLibro datosLibro = opciones.get(i);
+//                        libroService.guardarLibroConAutores(libro, datosLibro.datosAutor());
+//                    }
+//
+//                    return;
+//                } else if (opcion == opciones.size() + 4) {
+//                    for(List<DatosLibro> listaInterior : paginas){
+//                        for (DatosLibro dato : listaInterior){
+//                            System.out.println("---------- SU ELECCION ----------");
+//                            System.out.println(Color.MORADO + "SE ELIGIERON LOS SIGUIENTES LIBROS: ");
+//                            System.out.println(Color.AZUL + "---> " + dato.titulo());
+//                            System.out.println(Color.CYAN + "----------------- POR: " + dato.autoresToString() + Color.RESET);
+//                        }
+//
+//                    }
+//
+//                    System.out.println("---------- INFORME DE LA BASE DE DATOS ----------");
+//
+//                    List<DatosLibro> datosLibrosAgregar = paginas.stream()
+//                            .flatMap(List::stream)
+//                            .toList();
+//
+//                    List<Libro> librosAgregar = datosLibrosAgregar.stream()
+//                            .map(Libro::new)
+//                            .toList();
+//
+//                    for (int i = 0; i < librosAgregar.size(); i++) {
+//                        Libro libro = librosAgregar.get(i);
+//                        DatosLibro datosLibro = datosLibrosAgregar.get(i);
+//                        libroService.guardarLibroConAutores(libro, datosLibro.datosAutor());
+//                    }
+//                    return;
+//
+//
+//                }
+//            }
 
         } else {
             System.out.println("---------- RESULTADOS ----------");
@@ -225,7 +235,6 @@ public class Principal {
 
 
     }
-
 
     public void listarAutoresVivosEnAnio(){
         System.out.println("---------- BUSQUEDA DE AUTORES POR AÑO ----------");
@@ -253,7 +262,7 @@ public class Principal {
         List<Libro> librosFiltrados = libroService.traerLibrosPorLenguaje(idiomasBuscar.get(0).getKey());
         prompt = "---------- RESULTADOS DE BUSQUEDA POR IDIOMA ----------";
         if (librosFiltrados.isEmpty()){
-               System.out.println(Color.ROJO+ "*No se encontraron libros del idioma seleccionado*");
+               System.out.println(Color.ROJO+ "*No se encontraron libros del idioma seleccionado*"+ Color.RESET);
                return;
         }
         organizarEnPaginas(librosFiltrados, Libro::toStringConLenguajes, false, false, prompt);
@@ -272,7 +281,12 @@ public class Principal {
             int[] contador = {1 + (indicePagina* OpcionesPorPagina)};
             opciones.forEach(s -> {
                 int contadorActual = contador[0]++;
-                System.out.println(Color.AZUL + contadorActual + " - " + metodoImpresion.apply(s) + Color.RESET);
+                if (permitirSeleccion){
+                    System.out.println(Color.AZUL + contadorActual + " - " + metodoImpresion.apply(s) + Color.RESET);
+                } else {
+                    System.out.println(metodoImpresion.apply(s) + Color.RESET);
+                }
+
             });
 
             System.out.println("\n");
@@ -332,7 +346,6 @@ public class Principal {
     }
 
 
-
     public void mostrarMenuDeConfiguraciones(){
         var opcion = -1;
         while (opcion != 0) {
@@ -367,13 +380,13 @@ public class Principal {
                     cambiarCantidadDeElementosPorPagina();
                     break;
                 case 4:
-                    libroService.borrarTodosLosLibros();
+                    eliminarLibros();
                     break;
                 case 5:
-                    libroService.borrarTodosLosaAutores();
+                    eliminarAutores();
                     break;
                 case 6:
-                    libroService.borrarTodosLosaAutores();
+                    libroService.borrarTodosLosAutores();
                     libroService.borrarTodosLosLibros();
                     break;
                 case 0:
@@ -396,6 +409,31 @@ public class Principal {
         DynamicConfig.set("cantidad_opciones", Integer.toString(cantidad));
         DynamicConfig.save();
         System.out.println(Color.MORADO + "Se cambió el numero de elementos por pagina a: " + cantidad + Color.RESET);
+    }
+
+    public void eliminarLibros(){
+        String prompt = String.format("""
+                ---------- ELIMINAR LIBROS ----------
+                %s*Seleccione el libro que desea eliminar*%s
+                """, Color.MORADO, Color.RESET);
+        List<Libro> librosEliminar = organizarEnPaginas(libroService.traerTodosLosLibros(), Libro::toStringSeleccion, true, true, prompt);
+        if (librosEliminar.isEmpty()){
+            return;
+        }
+        libroService.borrarLibros(librosEliminar);
+
+    }
+
+    public void eliminarAutores(){
+        String prompt = String.format("""
+                ---------- ELIMINAR AUTORES ----------
+                %s*Seleccione el autor que desea eliminar*%s
+                """, Color.MORADO, Color.RESET);
+        List<Autor> autoresEliminar = organizarEnPaginas(libroService.traerTodosLosautores(), Autor::getNombre, true, true, prompt);
+        if (autoresEliminar.isEmpty()){
+            return;
+        }
+        libroService.borrarAutores(autoresEliminar);
     }
 
 
