@@ -40,19 +40,19 @@ public class Autor {
 
     @Override
     public String toString() {
-        return "---------- AUTOR ---------- \n"
+        return "\n---------- AUTOR ---------- \n"
                 + Color.CYAN + "Nombre: " + nombre + "\n"
                 + Color.VERDE_CLARO + "Periodo: "
                 + (anio_nacimiento != null ? anio_nacimiento : "Desconocido") + " - "
                 + (anio_fallecimiento != null ? anio_fallecimiento : "Desconocido") + "\n"
-                + Color.MORADO + "Libros populares: " + topLibrosToString(cantidadPopulares) + Color.RESET;
+                + Color.MORADO + "Libros asociados: " + topLibrosToString(cantidadPopulares) + Color.RESET;
     }
 
 
     public String topLibrosToString(int limite){
         List<String> listaPopulares = libros.stream()
                 .sorted(Comparator.comparingLong(Libro::getDescargas).reversed())  // Sort by descargas in descending order
-                .limit(limite)  // Limit the result to top 5
+                .limit(libros.size())
                 .map(Libro::getTitulo)  // Extract the "titulo" of each libro
                 .toList();
 
@@ -82,12 +82,7 @@ public class Autor {
         return libros;
     }
 
-    public void addLibro(Libro libro) {
-        if (this.libros == null) {
-            this.libros = new HashSet<>();
-        }
-        this.libros.add(libro);
-    }
+    public void addLibro(Libro libro) { this.libros.add(libro); libro.addAutor(this); }
 
 
     public long getId() {

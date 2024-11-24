@@ -125,8 +125,10 @@ public class Libro {
         return stringAutores.toString();
     }
 
-    public void setAutores(Set<Autor> autores) {
-        this.autores = autores != null ? autores : new HashSet<>();
+    public void setAutores(Set<Autor> autores) { this.autores = autores; for (Autor autor : autores) { autor.getLibros().add(this); } }
+
+    public void addAutor(Autor autor){
+        this.autores.add(autor);
     }
 
     public Set<Autor> getAutores() {

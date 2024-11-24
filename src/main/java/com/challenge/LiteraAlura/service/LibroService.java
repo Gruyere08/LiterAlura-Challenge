@@ -35,86 +35,43 @@ public class LibroService {
     }
 
 
-    public void guardarLibroConAutores(DatosLibro datoLibro){
+    @Transactional
+    public void guardarLibroConAutores(DatosLibro datoLibro) {
 
-        //Buscamos si el libro existe
+        // Check if the book already exists
         Optional<Libro> libroExistente = libroRepository.findByTitulo(datoLibro.titulo());
-        if (libroExistente.isPresent()){
-            System.out.println(Color.MORADO + "El libro "+ "\"" + libroExistente.get().getTitulo() +"\""  +" ya existe en la base de datos" + Color.RESET);
+        if (libroExistente.isPresent()) {
+            System.out.println("El libro \"" + libroExistente.get().getTitulo() + "\" ya existe en la base de datos");
             return;
         }
 
+        // Create and save the book
         Libro libro = new Libro(datoLibro);
         libroRepository.save(libro);
-        libro = libroRepository.findByTitulo(libro.getTitulo()).get();
 
-        //procesamos los autores
-        Set<Autor> autoresParaAgregar = new HashSet<>();
-        for(DatosAutor datoAutor : datoLibro.datosAutor()){
-            Optional<Autor> autorExistente = autorRepository.findByNombre(datoAutor.nombre());
+        for (DatosAutor datoAutor : datoLibro.datosAutor()) {
             Autor autor;
 
-            if(autorExistente.isPresent()){
+            // Check if the author already exists
+            Optional<Autor> autorExistente = autorRepository.findByNombre(datoAutor.nombre());
+            if (autorExistente.isPresent()) {
                 autor = autorExistente.get();
-                System.out.println( Color.VERDE + "AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre() + Color.RESET);
-            }else {
+                System.out.println("AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre());
+            } else {
                 autor = new Autor(datoAutor);
-                System.out.println(Color.CYAN + "NUEVO AUTOR REGISTRADO: " + autor.getNombre() + Color.RESET );
+                System.out.println("NUEVO AUTOR REGISTRADO: " + autor.getNombre());
                 autorRepository.save(autor);
-                autor = autorRepository.findByNombre(autor.getNombre()).get();
-
             }
+
+            // Link the book to the author
             autor.addLibro(libro);
-            autoresParaAgregar.add(autor);
         }
 
-        libro.setAutores(autoresParaAgregar);
-        libroRepository.save(libro);
-        System.out.println(Color.CYAN + "NUEVO LIBRO REGISTRADO: " + libro.getTitulo() + Color.RESET);
-        return;
+        // Update the authors of the book
+        libroRepository.saveAndFlush(libro);
+
+        System.out.println("NUEVO LIBRO REGISTRADO: " + libro.getTitulo());
     }
-
-
-
-//    public void guardarLibroConAutores(Libro libro, List<DatosAutor> datosAutor){
-//
-//        //Buscamos si el libro existe
-//        Optional<Libro> libroExistente = libroRepository.findByTitulo(libro.getTitulo());
-//        if (libroExistente.isPresent()){
-//            System.out.println(Color.MORADO + "El libro "+ "\"" + libroExistente.get().getTitulo() +"\""  +" ya existe en la base de datos" + Color.RESET);
-//            return;
-//        }
-//
-//        libroRepository.save(libro);
-//        libro = libroRepository.findByTitulo(libro.getTitulo()).get();
-//
-//
-//
-//        //procesamos los autores
-//        Set<Autor> autoresParaAgregar = new HashSet<>();
-//        for(DatosAutor datoAutor : datosAutor){
-//            Optional<Autor> autorExistente = autorRepository.findByNombre(datoAutor.nombre());
-//            Autor autor;
-//
-//            if(autorExistente.isPresent()){
-//                autor = autorExistente.get();
-//                System.out.println( Color.VERDE + "AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre() + Color.RESET);
-//            }else {
-//                autor = new Autor(datoAutor);
-//                System.out.println(Color.CYAN + "NUEVO AUTOR REGISTRADO: " + autor.getNombre() + Color.RESET );
-//                autorRepository.save(autor);
-//                autor = autorRepository.findByNombre(autor.getNombre()).get();
-//
-//            }
-//            autor.addLibro(libro);
-//            autoresParaAgregar.add(autor);
-//        }
-//
-//        libro.setAutores(autoresParaAgregar);
-//        libroRepository.save(libro);
-//        System.out.println(Color.CYAN + "NUEVO LIBRO REGISTRADO: " + libro.getTitulo() + Color.RESET);
-//        return;
-//    }
 
 
     public List<Libro> traerTodosLosLibros(){
