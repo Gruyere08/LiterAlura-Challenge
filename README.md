@@ -1,6 +1,7 @@
 ﻿# LiterAlura-Challenge
 
 <h2>Función 1: Búsqueda de Libros</h2>
+
 ![Captura de pantalla 2024-11-24 210605](https://github.com/user-attachments/assets/1b8b172f-b0ea-4dea-8bb3-657cf73994e2)
 
 <p>
