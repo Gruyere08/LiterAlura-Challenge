@@ -1,4 +1,37 @@
-# LiterAlura-Challenge
+# Challenge LiterAlura 📚
+
+**Challenge LiterAlura** es una aplicación de consola desarrollada como parte de un desafío propuesto por **Alura Latam** en colaboración con el programa **Oracle Next Education (ONE)**. Este proyecto tiene como objetivo principal demostrar habilidades en desarrollo backend utilizando el **Spring Framework** y el lenguaje **Java**.
+
+La aplicación fue diseñada para gestionar y explorar una base de datos de libros y autores, ofreciendo una experiencia rica en funcionalidades como búsquedas avanzadas, filtrado, paginación, y personalización de configuraciones. Además, incluye la capacidad de trabajar con datos locales, permitiendo agregar, eliminar y consultar libros y autores de forma dinámica.
+
+---
+
+## 🎯 Propósito del Proyecto
+
+El propósito de este desafío es poner a prueba los conocimientos adquiridos en el desarrollo backend, específicamente:
+- Implementación de **Spring Framework** para la creación de aplicaciones robustas y modulares.
+- Gestión eficiente de bases de datos locales.
+- Diseño de menús de navegación intuitivos y funcionales en una aplicación de consola.
+- Incorporación de principios de desarrollo como modularidad, reusabilidad de código y buenas prácticas.
+
+---
+
+## ✨ Características Principales
+
+- **Búsqueda de libros y autores**: Realiza consultas avanzadas basadas en palabras clave, año o idioma.
+- **Listado de elementos registrados**: Explora libros y autores con datos enriquecidos, incluyendo popularidad y relación entre ellos.
+- **Configuraciones personalizables**: Adapta la experiencia de la aplicación ajustando el número de elementos por página, filtrando datos, y más.
+- **Gestión de datos locales**: Agrega, elimina y actualiza información almacenada en la base de datos.
+- **Análisis y estadísticas**: Obtén insights como el TOP 5 de libros más descargados.
+
+¡Explora las funciones completas del proyecto más abajo!
+
+## 📖 Manual de Usuario:
+## 🗂️ Opciones del Menú Principal:
+
+
+![image](https://github.com/user-attachments/assets/0e3aa3e3-bad8-4393-aa98-db6eaa673e75)
+
 
 ## 🚀 Función 1: Búsqueda de Libros
 ![Captura de pantalla 2024-11-24 211918](https://github.com/user-attachments/assets/f1cb4624-43e1-4418-a3a9-5b37ad90ca92)
@@ -84,6 +117,8 @@ Esta función permite mostrar el **TOP 5** de los libros con más descargas regi
 
 Esta opción abre el menú de configuraciones.
 
+
+![image](https://github.com/user-attachments/assets/f441f795-05c9-4f9f-873a-c96e7e7f97c2)
 
 
 ## ⚙️ Opciones del Menú de Configuraciones
