@@ -1,4 +1,37 @@
-# LiterAlura-Challenge
+# Challenge LiterAlura 📚
+
+**Challenge LiterAlura** es una aplicación de consola desarrollada como parte de un desafío propuesto por **Alura Latam** en colaboración con el programa **Oracle Next Education (ONE)**. Este proyecto tiene como objetivo principal demostrar habilidades en desarrollo backend utilizando el **Spring Framework** y el lenguaje **Java**.
+
+La aplicación fue diseñada para gestionar y explorar una base de datos de libros y autores, ofreciendo una experiencia rica en funcionalidades como búsquedas avanzadas, filtrado, paginación, y personalización de configuraciones. Además, incluye la capacidad de trabajar con datos locales, permitiendo agregar, eliminar y consultar libros y autores de forma dinámica.
+
+---
+
+## 🎯 Propósito del Proyecto
+
+El propósito de este desafío es poner a prueba los conocimientos adquiridos en el desarrollo backend, específicamente:
+- Implementación de **Spring Framework** para la creación de aplicaciones robustas y modulares.
+- Gestión eficiente de bases de datos locales.
+- Diseño de menús de navegación intuitivos y funcionales en una aplicación de consola.
+- Incorporación de principios de desarrollo como modularidad, reusabilidad de código y buenas prácticas.
+
+---
+
+## ✨ Características Principales
+
+- **Búsqueda de libros y autores**: Realiza consultas avanzadas basadas en palabras clave, año o idioma.
+- **Listado de elementos registrados**: Explora libros y autores con datos enriquecidos, incluyendo popularidad y relación entre ellos.
+- **Configuraciones personalizables**: Adapta la experiencia de la aplicación ajustando el número de elementos por página, filtrando datos, y más.
+- **Gestión de datos locales**: Agrega, elimina y actualiza información almacenada en la base de datos.
+- **Análisis y estadísticas**: Obtén insights como el TOP 5 de libros más descargados.
+
+¡Explora las funciones completas del proyecto más abajo!
+
+## 📖 Manual de Usuario:
+## 🗂️ Opciones del Menú Principal:
+
+
+![image](https://github.com/user-attachments/assets/0e3aa3e3-bad8-4393-aa98-db6eaa673e75)
+
 
 ## 🚀 Función 1: Búsqueda de Libros
 ![Captura de pantalla 2024-11-24 211918](https://github.com/user-attachments/assets/f1cb4624-43e1-4418-a3a9-5b37ad90ca92)
@@ -85,33 +118,70 @@ Esta función permite mostrar el **TOP 5** de los libros con más descargas regi
 Esta opción abre el menú de configuraciones.
 
 
+![image](https://github.com/user-attachments/assets/f441f795-05c9-4f9f-873a-c96e7e7f97c2)
 
-## Opciones del menú de configuraciones
 
-A continuación se detallarán todas las opciones que se encuentran dentro del menú de configuraciones:
+## ⚙️ Opciones del Menú de Configuraciones
 
-### Opción 1 y 2: Ocultar Libros sin autores y Ocultar autores sin libros
+A continuación, se detallan todas las opciones disponibles dentro del menú de configuraciones:
+
+---
+
+### 🖋️ Opción 1 y 2: Ocultar Libros sin Autores y Ocultar Autores sin Libros
 
 ![image](https://github.com/user-attachments/assets/de4340bc-fddd-44cc-ab8c-9b00fc2c733a)
 
-Estas dos opciones sirven para ocultar de las búsquedas a elementos de la base de datos que no tengan otros elementos relacionados.
+Estas opciones permiten ocultar elementos de la base de datos que no tengan relación con otros elementos. Esto ayuda a mantener las listas más limpias y enfocadas en elementos útiles.
 
-- **Opción 1:** Excluirá los **Libros sin autores** cuando se utilice la función "Listar libros registrados".
-- **Opción 2:** Excluirá los **Autores sin libros** cuando se use la función "Listar Autores registrados" del menú principal.
+- **Opción 1:** Excluirá los **Libros sin autores** cuando se use la función "Listar libros registrados".
+- **Opción 2:** Excluirá los **Autores sin libros** al utilizar la función "Listar autores registrados".
 
-Seleccionar cualquiera de estas dos opciones hará que el valor alterne entre **SI** y **NO**.
+Seleccionar cualquiera de estas opciones alternará su estado entre **SI** y **NO**, según la preferencia del usuario.
 
+---
 
-### Opción 3: Cambiar número de elementos por página en búsquedas
+### 🔢 Opción 3: Cambiar Número de Elementos por Página en Búsquedas
 
 ![image](https://github.com/user-attachments/assets/4254d512-5c94-479c-95d4-46beb95a47aa)
-
 ![image](https://github.com/user-attachments/assets/c7fed64f-3ce0-4046-90b5-c030b0f14ef7)
+*Menu de idiomas con 3 elementos por pagina*
 ![image](https://github.com/user-attachments/assets/88053196-ed56-4439-990f-cfdd2773d1d9)
+*Menu de idiomas con 10 elementos por pagina*
 
+Esta opción permite personalizar cuántos elementos se mostrarán por página durante las búsquedas y listados de la aplicación. Es útil para ajustar la visualización según las preferencias del usuario.
 
+- El valor predeterminado es **5** elementos por página.
+- Al seleccionar esta opción, se podrá ingresar un nuevo valor. Este cambio se guardará automáticamente en un archivo de configuraciones y se recordará en la próxima sesión.
 
+---
 
-Esta opción sirve para alterar la cantidad de elementos que se mostrarán por página durante la mayoría de funciones de la aplicación. Esto hará posible mostrar más elementos si se desea o mostrar menos si se quiere que todos los elementos quepan en la pantalla.
+### 🗑️ Opción 4 y 5: Eliminar Libros y Autores
 
-El valor predeterminado de elementos por pantalla es **5**. Si desea cambiar el valor, debe seleccionar la opción e ingresar el nuevo valor. Este valor se guardará en un archivo de configuraciones y será recordado en la próxima sesión.
+![image](https://github.com/user-attachments/assets/4bb86ce0-9b95-4e9c-ab29-244b482a0ea4)
+![image](https://github.com/user-attachments/assets/001e8f66-4d11-4c0f-80b2-cafe34fa1bbf)
+
+Estas opciones permiten eliminar elementos de la base de datos local de forma manual. 
+
+- **Opción 4:** Eliminar libros.
+- **Opción 5:** Eliminar autores.
+
+Al seleccionar cualquiera de estas opciones, se desplegará un menú con los elementos disponibles. El usuario podrá navegar por este menú y seleccionar los elementos que desea eliminar.
+
+#### 📱 Opciones de navegación para eliminar elementos:
+- **Selección de un elemento:** Ingrese el número correspondiente al elemento que desea eliminar.
+- **Página Anterior/Siguiente:** Navegar entre las páginas de resultados.
+- **Seleccionar todos los elementos de esta página / Seleccionar TODOS los elementos:** Selecciona todos los elementos visibles en la página actual o en todas las páginas.
+- **Salir:** Regresar al menú principal sin realizar cambios.
+
+---
+
+### 🧹 Opción 6: Limpiar Base de Datos
+
+Esta opción permite **eliminar todos los elementos** de todas las tablas de la base de datos. Está diseñada para fines de prueba o para realizar una limpieza completa.
+
+⚠️ **Advertencia:** Al seleccionar esta opción, todos los datos serán eliminados de forma permanente.
+
+---
+
+Cada una de estas opciones del menú de configuraciones ofrece flexibilidad al usuario para personalizar la experiencia y administrar la base de datos de manera efectiva.
+
