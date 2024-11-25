@@ -38,7 +38,7 @@ public class LibroService {
     public void guardarLibroConAutores(DatosLibro datoLibro) {
         Optional<Libro> libroExistente = libroRepository.findByTitulo(datoLibro.titulo());
         if (libroExistente.isPresent()) {
-            System.out.println("El libro \"" + libroExistente.get().getTitulo() + "\" ya existe en la base de datos");
+            System.out.println(Color.MORADO+"El libro \"" + libroExistente.get().getTitulo() + "\" ya existe en la base de datos"+Color.RESET);
             return;
         }
 
@@ -50,7 +50,7 @@ public class LibroService {
                     .orElseGet(() -> {
                         Autor nuevoAutor = new Autor(datoAutor);
                         autorRepository.saveAndFlush(nuevoAutor); // Ensure immediate persistence
-                        System.out.println("NUEVO AUTOR REGISTRADO: " + nuevoAutor.getNombre());
+                        System.out.println(Color.CYAN+"NUEVO AUTOR REGISTRADO: " + nuevoAutor.getNombre()+Color.RESET);
                         return nuevoAutor;
                     });
 
@@ -59,7 +59,7 @@ public class LibroService {
 
         libroRepository.saveAndFlush(libro);
 
-        System.out.println("NUEVO LIBRO REGISTRADO: " + libro.getTitulo());
+        System.out.println(Color.AMARILLO + "NUEVO LIBRO REGISTRADO: " + libro.getTitulo()+Color.RESET);
     }
 
 
