@@ -84,3 +84,34 @@ Esta función permite mostrar el **TOP 5** de los libros con más descargas regi
 
 Esta opción abre el menú de configuraciones.
 
+
+
+## Opciones del menú de configuraciones
+
+A continuación se detallarán todas las opciones que se encuentran dentro del menú de configuraciones:
+
+### Opción 1 y 2: Ocultar Libros sin autores y Ocultar autores sin libros
+
+![image](https://github.com/user-attachments/assets/de4340bc-fddd-44cc-ab8c-9b00fc2c733a)
+
+Estas dos opciones sirven para ocultar de las búsquedas a elementos de la base de datos que no tengan otros elementos relacionados.
+
+- **Opción 1:** Excluirá los **Libros sin autores** cuando se utilice la función "Listar libros registrados".
+- **Opción 2:** Excluirá los **Autores sin libros** cuando se use la función "Listar Autores registrados" del menú principal.
+
+Seleccionar cualquiera de estas dos opciones hará que el valor alterne entre **SI** y **NO**.
+
+
+### Opción 3: Cambiar número de elementos por página en búsquedas
+
+![image](https://github.com/user-attachments/assets/4254d512-5c94-479c-95d4-46beb95a47aa)
+
+![image](https://github.com/user-attachments/assets/c7fed64f-3ce0-4046-90b5-c030b0f14ef7)
+![image](https://github.com/user-attachments/assets/88053196-ed56-4439-990f-cfdd2773d1d9)
+
+
+
+
+Esta opción sirve para alterar la cantidad de elementos que se mostrarán por página durante la mayoría de funciones de la aplicación. Esto hará posible mostrar más elementos si se desea o mostrar menos si se quiere que todos los elementos quepan en la pantalla.
+
+El valor predeterminado de elementos por pantalla es **5**. Si desea cambiar el valor, debe seleccionar la opción e ingresar el nuevo valor. Este valor se guardará en un archivo de configuraciones y será recordado en la próxima sesión.
