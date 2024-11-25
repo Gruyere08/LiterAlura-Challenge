@@ -144,7 +144,9 @@ Seleccionar cualquiera de estas opciones alternará su estado entre **SI** y **N
 
 ![image](https://github.com/user-attachments/assets/4254d512-5c94-479c-95d4-46beb95a47aa)
 ![image](https://github.com/user-attachments/assets/c7fed64f-3ce0-4046-90b5-c030b0f14ef7)
+*Menu de idiomas con 3 elementos por pagina*
 ![image](https://github.com/user-attachments/assets/88053196-ed56-4439-990f-cfdd2773d1d9)
+*Menu de idiomas con 10 elementos por pagina*
 
 Esta opción permite personalizar cuántos elementos se mostrarán por página durante las búsquedas y listados de la aplicación. Es útil para ajustar la visualización según las preferencias del usuario.
 
