@@ -19,7 +19,9 @@ Los resultados de la búsqueda se presentan en una lista paginada, mostrando el 
 ## 📚 Funciones 2 y 3: Listado de Autores y Libros Registrados
 
 ![image](https://github.com/user-attachments/assets/4ca06dc7-4969-4f29-a9b9-50d24dd34e76)
+
 ![image](https://github.com/user-attachments/assets/959e2f32-2830-458e-a2da-41c26482abea)
+
 ![image](https://github.com/user-attachments/assets/1d99eafc-471f-4197-9422-ad318f64519b)
 
 Las funciones 2 y 3 de la aplicación sirven para listar todos los autores y libros registrados en la base de datos local, respectivamente. Al seleccionar estas opciones, automáticamente se mostrará una lista de todos los autores o libros que hayan sido previamente registrados.
