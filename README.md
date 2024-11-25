@@ -51,6 +51,7 @@ Esta función permite al usuario ingresar un año específico y, tras una búsqu
 ## 🌍 Función 5: Búsqueda de Libros por Idioma
 
 ![image](https://github.com/user-attachments/assets/8bcbe7d2-736c-41e3-8e20-1915e2bef6bd)
+
 ![image](https://github.com/user-attachments/assets/71a418ef-cc24-4fcb-88df-2559b1dc3514)
 ![image](https://github.com/user-attachments/assets/300210e6-59d2-45bd-8b82-17f86bcbaa1c)
 
