@@ -86,32 +86,65 @@ Esta opción abre el menú de configuraciones.
 
 
 
-## Opciones del menú de configuraciones
+## ⚙️ Opciones del Menú de Configuraciones
 
-A continuación se detallarán todas las opciones que se encuentran dentro del menú de configuraciones:
+A continuación, se detallan todas las opciones disponibles dentro del menú de configuraciones:
 
-### Opción 1 y 2: Ocultar Libros sin autores y Ocultar autores sin libros
+---
+
+### 🖋️ Opción 1 y 2: Ocultar Libros sin Autores y Ocultar Autores sin Libros
 
 ![image](https://github.com/user-attachments/assets/de4340bc-fddd-44cc-ab8c-9b00fc2c733a)
 
-Estas dos opciones sirven para ocultar de las búsquedas a elementos de la base de datos que no tengan otros elementos relacionados.
+Estas opciones permiten ocultar elementos de la base de datos que no tengan relación con otros elementos. Esto ayuda a mantener las listas más limpias y enfocadas en elementos útiles.
 
-- **Opción 1:** Excluirá los **Libros sin autores** cuando se utilice la función "Listar libros registrados".
-- **Opción 2:** Excluirá los **Autores sin libros** cuando se use la función "Listar Autores registrados" del menú principal.
+- **Opción 1:** Excluirá los **Libros sin autores** cuando se use la función "Listar libros registrados".
+- **Opción 2:** Excluirá los **Autores sin libros** al utilizar la función "Listar autores registrados".
 
-Seleccionar cualquiera de estas dos opciones hará que el valor alterne entre **SI** y **NO**.
+Seleccionar cualquiera de estas opciones alternará su estado entre **SI** y **NO**, según la preferencia del usuario.
 
+---
 
-### Opción 3: Cambiar número de elementos por página en búsquedas
+### 🔢 Opción 3: Cambiar Número de Elementos por Página en Búsquedas
 
 ![image](https://github.com/user-attachments/assets/4254d512-5c94-479c-95d4-46beb95a47aa)
-
 ![image](https://github.com/user-attachments/assets/c7fed64f-3ce0-4046-90b5-c030b0f14ef7)
 ![image](https://github.com/user-attachments/assets/88053196-ed56-4439-990f-cfdd2773d1d9)
 
+Esta opción permite personalizar cuántos elementos se mostrarán por página durante las búsquedas y listados de la aplicación. Es útil para ajustar la visualización según las preferencias del usuario.
 
+- El valor predeterminado es **5** elementos por página.
+- Al seleccionar esta opción, se podrá ingresar un nuevo valor. Este cambio se guardará automáticamente en un archivo de configuraciones y se recordará en la próxima sesión.
 
+---
 
-Esta opción sirve para alterar la cantidad de elementos que se mostrarán por página durante la mayoría de funciones de la aplicación. Esto hará posible mostrar más elementos si se desea o mostrar menos si se quiere que todos los elementos quepan en la pantalla.
+### 🗑️ Opción 4 y 5: Eliminar Libros y Autores
 
-El valor predeterminado de elementos por pantalla es **5**. Si desea cambiar el valor, debe seleccionar la opción e ingresar el nuevo valor. Este valor se guardará en un archivo de configuraciones y será recordado en la próxima sesión.
+![image](https://github.com/user-attachments/assets/4bb86ce0-9b95-4e9c-ab29-244b482a0ea4)
+![image](https://github.com/user-attachments/assets/001e8f66-4d11-4c0f-80b2-cafe34fa1bbf)
+
+Estas opciones permiten eliminar elementos de la base de datos local de forma manual. 
+
+- **Opción 4:** Eliminar libros.
+- **Opción 5:** Eliminar autores.
+
+Al seleccionar cualquiera de estas opciones, se desplegará un menú con los elementos disponibles. El usuario podrá navegar por este menú y seleccionar los elementos que desea eliminar.
+
+#### 📱 Opciones de navegación para eliminar elementos:
+- **Selección de un elemento:** Ingrese el número correspondiente al elemento que desea eliminar.
+- **Página Anterior/Siguiente:** Navegar entre las páginas de resultados.
+- **Seleccionar todos los elementos de esta página / Seleccionar TODOS los elementos:** Selecciona todos los elementos visibles en la página actual o en todas las páginas.
+- **Salir:** Regresar al menú principal sin realizar cambios.
+
+---
+
+### 🧹 Opción 6: Limpiar Base de Datos
+
+Esta opción permite **eliminar todos los elementos** de todas las tablas de la base de datos. Está diseñada para fines de prueba o para realizar una limpieza completa.
+
+⚠️ **Advertencia:** Al seleccionar esta opción, todos los datos serán eliminados de forma permanente.
+
+---
+
+Cada una de estas opciones del menú de configuraciones ofrece flexibilidad al usuario para personalizar la experiencia y administrar la base de datos de manera efectiva.
+
