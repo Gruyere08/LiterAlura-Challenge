@@ -43,8 +43,9 @@ public class Principal {
                     3 - Listar autores registrados
                     4 - Listar autores vivos en un determinado año
                     5 - Listar libros por idioma
+                    6 - Mostrar el Top 5 libros
                     %s
-                    9 - Configuraciones %s              
+                    9 - Configuraciones %s
                     0 - Salir %s
                     """, Color.CYAN, Color.MORADO, Color.ROJO, Color.RESET);
             System.out.println(menu);
@@ -65,6 +66,9 @@ public class Principal {
                     break;
                 case 5:
                     listarLibrosPorIdioma();
+                    break;
+                case 6:
+                    listarTop5Libros();
                     break;
                 case 9:
                     mostrarMenuDeConfiguraciones();
@@ -149,13 +153,24 @@ public class Principal {
         }
 
         List<Libro> librosFiltrados = libroService.traerLibrosPorLenguaje(idiomasBuscar.get(0).getKey());
-        prompt = "---------- RESULTADOS DE BUSQUEDA POR IDIOMA ----------";
+        prompt = String.format("---------- LIBROS DISPONIBLES EN %s ----------", idiomasBuscar.get(0).getValue().toUpperCase());
         if (librosFiltrados.isEmpty()){
                System.out.println(Color.ROJO+ "*No se encontraron libros del idioma seleccionado*"+ Color.RESET);
                return;
         }
         organizarEnPaginas(librosFiltrados, Libro::toStringConLenguajes, false, false, prompt);
 
+    }
+
+    public void listarTop5Libros(){
+        System.out.println("---------- TOP 5 LIBROS ----------");
+        List<Libro> librosMostrar = libroService.traerTop5Libros();
+        if (librosMostrar.isEmpty()){
+            System.out.println(Color.ROJO+"*No hay libros registrados en la base de datos*" + Color.RESET);
+            return;
+        }
+        System.out.println("EL TOP 5 DE LIBROS ES: ");
+        librosMostrar.forEach(System.out::println);
     }
 
 
@@ -167,7 +182,7 @@ public class Principal {
         while (true){
             System.out.println(prompt);
             List<T> opciones = paginas.get(indicePagina);
-            int[] contador = {1 + (indicePagina* OpcionesPorPagina)};
+            int[] contador = {1};
             opciones.forEach(s -> {
                 int contadorActual = contador[0]++;
                 if (permitirSeleccion){

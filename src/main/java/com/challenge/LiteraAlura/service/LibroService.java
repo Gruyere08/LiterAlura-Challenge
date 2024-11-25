@@ -11,14 +11,13 @@ import com.challenge.LiteraAlura.repository.LibroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 @Service
 public class LibroService {
+
 
     private LibroRepository libroRepository;
 
@@ -37,37 +36,27 @@ public class LibroService {
 
     @Transactional
     public void guardarLibroConAutores(DatosLibro datoLibro) {
-
-        // Check if the book already exists
         Optional<Libro> libroExistente = libroRepository.findByTitulo(datoLibro.titulo());
         if (libroExistente.isPresent()) {
             System.out.println("El libro \"" + libroExistente.get().getTitulo() + "\" ya existe en la base de datos");
             return;
         }
 
-        // Create and save the book
         Libro libro = new Libro(datoLibro);
         libroRepository.save(libro);
 
         for (DatosAutor datoAutor : datoLibro.datosAutor()) {
-            Autor autor;
+            Autor autor = autorRepository.findByNombre(datoAutor.nombre())
+                    .orElseGet(() -> {
+                        Autor nuevoAutor = new Autor(datoAutor);
+                        autorRepository.saveAndFlush(nuevoAutor); // Ensure immediate persistence
+                        System.out.println("NUEVO AUTOR REGISTRADO: " + nuevoAutor.getNombre());
+                        return nuevoAutor;
+                    });
 
-            // Check if the author already exists
-            Optional<Autor> autorExistente = autorRepository.findByNombre(datoAutor.nombre());
-            if (autorExistente.isPresent()) {
-                autor = autorExistente.get();
-                System.out.println("AUTOR YA EXISTE EN LA BASE DE DATOS: " + autor.getNombre());
-            } else {
-                autor = new Autor(datoAutor);
-                System.out.println("NUEVO AUTOR REGISTRADO: " + autor.getNombre());
-                autorRepository.save(autor);
-            }
-
-            // Link the book to the author
             autor.addLibro(libro);
         }
 
-        // Update the authors of the book
         libroRepository.saveAndFlush(libro);
 
         System.out.println("NUEVO LIBRO REGISTRADO: " + libro.getTitulo());
@@ -144,6 +133,10 @@ public class LibroService {
 
     public List<Libro> traerLibrosPorLenguaje(String lenguaje){
         return libroRepository.findByLenguaje(lenguaje);
+    }
+
+    public List<Libro> traerTop5Libros(){
+        return libroRepository.findTop5ByOrderByDescargasDesc();
     }
 
     public static boolean isOcultarAutoresSinLibros() {

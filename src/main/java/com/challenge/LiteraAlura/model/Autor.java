@@ -3,13 +3,7 @@ package com.challenge.LiteraAlura.model;
 import com.challenge.LiteraAlura.otros.Color;
 import jakarta.persistence.*;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-
-
+import java.util.*;
 
 
 @Entity
@@ -40,19 +34,19 @@ public class Autor {
 
     @Override
     public String toString() {
-        return "\n---------- AUTOR ---------- \n"
+        return "---------- AUTOR ---------- \n"
                 + Color.CYAN + "Nombre: " + nombre + "\n"
                 + Color.VERDE_CLARO + "Periodo: "
                 + (anio_nacimiento != null ? anio_nacimiento : "Desconocido") + " - "
                 + (anio_fallecimiento != null ? anio_fallecimiento : "Desconocido") + "\n"
-                + Color.MORADO + "Libros asociados: " + topLibrosToString(cantidadPopulares) + Color.RESET;
+                + Color.MORADO + "Libros populares: " + topLibrosToString(cantidadPopulares) + Color.RESET;
     }
 
 
     public String topLibrosToString(int limite){
         List<String> listaPopulares = libros.stream()
                 .sorted(Comparator.comparingLong(Libro::getDescargas).reversed())  // Sort by descargas in descending order
-                .limit(libros.size())
+                .limit(limite)
                 .map(Libro::getTitulo)  // Extract the "titulo" of each libro
                 .toList();
 
@@ -77,6 +71,20 @@ public class Autor {
 
         return stringFinal.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Autor autor = (Autor) o;
+        return Objects.equals(id, autor.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 
     public Set<Libro> getLibros() {
         return libros;
