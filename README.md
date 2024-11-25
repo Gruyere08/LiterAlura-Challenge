@@ -7,12 +7,13 @@
 <p>
     Esta función permite a los usuarios realizar búsquedas de libros en una base de datos remota. Al ingresar una o varias palabras clave en el campo de búsqueda, la aplicación consulta la API y devuelve una lista de libros relevantes. 
     <br>
-    Los resultados de la búsqueda se presentan en una lista paginada, mostrando el título del libro y el autor. 
+    Los resultados de la búsqueda se presentan en una lista paginada, mostrando el título del libro y el autor.
+    Luego de elegir el libro que desea, este será transformado y guardado en la base de datos local
     <br>
-    **Opciones disponibles en los resultados:**
+    Opciones disponibles en los resultados:
     <ul>
         <li><b>Página Anterior/Siguiente:</b> Navegar entre las diferentes páginas de resultados.</li>
-        <li><b>Seleccionar todos los elementos de esta página/Seleccionar TODOS los elementos:</b> Marcar los libros de la página actual o de todos los resultados para realizar acciones posteriores (por ejemplo, agregar a una lista de favoritos).</li>
+        <li><b>Seleccionar todos los elementos de esta página/Seleccionar TODOS los elementos:</b> Selecciona todos los libros de la pagina actual o todos los libros de todas las paginas respecticamente.</li>
         <li><b>Salir:</b> Volver a la pantalla principal o cancelar la búsqueda.</li>
     </ul>
 </p>
