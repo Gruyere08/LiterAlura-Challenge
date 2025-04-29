@@ -6,6 +6,19 @@ La aplicación fue diseñada para explorar la base de datos de libros y autores 
 
 ---
 
+## 🛠️ Tecnologías utilizadas
+
+* Java
+* Spring Framework
+* Maven
+* PostgreSQL
+* Hibernate
+* JPA
+* IntelliJ
+* Jackson 
+
+---
+
 ## 🎯 Propósito del Proyecto
 
 El propósito de este desafío es poner a prueba los conocimientos adquiridos en el desarrollo backend, específicamente:
