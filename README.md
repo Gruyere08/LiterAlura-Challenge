@@ -2,7 +2,7 @@
 
 **Challenge LiterAlura** es una aplicación de consola desarrollada como parte de un desafío propuesto por **Alura Latam** en colaboración con el programa **Oracle Next Education (ONE)**. Este proyecto tiene como objetivo principal demostrar habilidades en desarrollo backend utilizando el **Spring Framework** y el lenguaje **Java**.
 
-La aplicación fue diseñada para gestionar y explorar una base de datos de libros y autores, ofreciendo una experiencia rica en funcionalidades como búsquedas avanzadas, filtrado, paginación, y personalización de configuraciones. Además, incluye la capacidad de trabajar con datos locales, permitiendo agregar, eliminar y consultar libros y autores de forma dinámica.
+La aplicación fue diseñada para explorar la base de datos de libros y autores de una API llamada "gutendex" la cual almacena cientos de libros de forma libre y gratuita. La aplicación una experiencia rica en funcionalidades como búsquedas avanzadas, filtrado, paginación, y personalización de configuraciones. Además, incluye la capacidad de trabajar con datos locales, permitiendo agregar, eliminar y consultar libros y autores de forma dinámica en una base de datos local. 
 
 ---
 
